@@ -1,0 +1,1064 @@
+/* ============================================================
+   Clínica Pollyany Policarpo — Landing Page VSL (v3)
+   Design System + 16:9 + Visual Atmosphere + Scroll Reveal + Fluid Typography
+   ============================================================ */
+
+/* ---------- Google Fonts (Optimized with display=swap) ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ---------- Brand Design Tokens ---------- */
+:root {
+  /* Brand Palette */
+  --purple:          #5D4170;
+  --purple-light:    #7E5C94;
+  --purple-dark:     #3D2A4D;
+  --purple-deep:     #2A1B35;
+  --purple-black:    #1A1020;
+  --gold:            #DCC397;
+  --gold-light:      #E8D5B3;
+  --gold-glow:       rgba(220, 195, 151, 0.35);
+  --blush:           #FFDBBA;
+  --bronze:          #BD916F;
+  --bronze-dark:     #9A7459;
+  --white:           #FAFAF8;
+  --white-pure:      #FFFFFF;
+  --gray:            #A097A8;
+  --gray-light:      #C5BCC9;
+
+  /* Typography */
+  --font-main:       'Poppins', 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Spacing */
+  --sp-xs:  0.25rem;
+  --sp-sm:  0.5rem;
+  --sp-md:  1rem;
+  --sp-lg:  1.5rem;
+  --sp-xl:  2rem;
+  --sp-2xl: clamp(2rem, 5vw, 3.5rem);
+  --sp-3xl: clamp(3rem, 7vw, 5rem);
+
+  /* Border Radii */
+  --radius-sm:   8px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   32px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- CSS Reset & Base ---------- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--purple-black);
+  color: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Luxury Grain Texture Overlay (Pure CSS data-uri) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ---------- Container Utility ---------- */
+.container {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2rem);
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================================
+   AMBIENT BLOBS & PARTICLES (Pure CSS Visual Atmosphere)
+   ============================================================ */
+
+.ambient-blob-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(clamp(60px, 10vw, 110px));
+  opacity: 0.16;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.ambient-blob--1 {
+  width: clamp(260px, 45vw, 550px);
+  height: clamp(260px, 45vw, 550px);
+  background: radial-gradient(circle, var(--gold) 0%, var(--purple) 70%);
+  top: -8%;
+  right: -8%;
+  animation: floatBlob1 24s ease-in-out infinite alternate;
+}
+
+.ambient-blob--2 {
+  width: clamp(220px, 40vw, 480px);
+  height: clamp(220px, 40vw, 480px);
+  background: radial-gradient(circle, var(--purple-light) 0%, var(--bronze) 75%);
+  bottom: 5%;
+  left: -8%;
+  animation: floatBlob2 28s ease-in-out infinite alternate;
+}
+
+@keyframes floatBlob1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-30px, 35px) scale(1.06); }
+  100% { transform: translate(25px, -20px) scale(0.95); }
+}
+
+@keyframes floatBlob2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(35px, -25px) scale(1.08); }
+  100% { transform: translate(-20px, 30px) scale(0.94); }
+}
+
+/* Floating Brand Golden Sparkles (Echo of Pollyany flower symbol) */
+.brand-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFF3D6 0%, var(--gold) 60%, var(--bronze) 100%);
+  box-shadow: 0 0 10px rgba(220, 195, 151, 0.7);
+  opacity: 0.45;
+  will-change: transform, opacity;
+  animation: floatParticle 16s ease-in-out infinite alternate;
+}
+
+.particle--1 { width: 5px; height: 5px; top: 18%; left: 12%; animation-duration: 18s; }
+.particle--2 { width: 4px; height: 4px; top: 32%; right: 15%; animation-duration: 22s; animation-delay: -4s; }
+.particle--3 { width: 6px; height: 6px; top: 68%; left: 8%; animation-duration: 20s; animation-delay: -8s; }
+.particle--4 { width: 3px; height: 3px; top: 82%; right: 18%; animation-duration: 25s; animation-delay: -12s; }
+.particle--5 { width: 5px; height: 5px; top: 48%; left: 88%; animation-duration: 19s; animation-delay: -6s; }
+.particle--6 { width: 4px; height: 4px; top: 88%; left: 45%; animation-duration: 23s; animation-delay: -15s; }
+
+@keyframes floatParticle {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-25px) translateX(15px) scale(1.25);
+    opacity: 0.65;
+  }
+  100% {
+    transform: translateY(-50px) translateX(-10px) scale(0.9);
+    opacity: 0.35;
+  }
+}
+
+/* ============================================================
+   HEADER BRAND (Discreet Top Bar with Logo & CRO)
+   ============================================================ */
+
+.header-brand {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto clamp(0.75rem, 2vw, 1.25rem);
+  padding: 0 var(--sp-xs);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+  position: relative;
+  z-index: 5;
+}
+
+.header-brand__logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+}
+
+.header-brand__logo {
+  width: clamp(125px, 25vw, 160px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.45));
+}
+
+.header-brand__cro {
+  font-size: clamp(0.68rem, 1.7vw, 0.78rem);
+  font-weight: 500;
+  color: var(--gold-light);
+  opacity: 0.85;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   SECTION 1 — VSL Hero (16:9 Video Travado)
+   ============================================================ */
+
+.vsl-stage {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 30%, #2A1B35 0%, #1A1020 100%);
+  padding: clamp(1.25rem, 3.5vh, 2.5rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 5vh, 3.5rem);
+  overflow: hidden;
+}
+
+.vsl-hero-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Dynamic ambient glow behind video */
+.vsl-ambient {
+  position: absolute;
+  inset: -12%;
+  background: var(--ambient-color, var(--purple));
+  filter: blur(clamp(60px, 12vw, 110px)) saturate(1.8);
+  opacity: 0.45;
+  transition: background 0.6s ease;
+  z-index: 0;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+/* Headline */
+.vsl-headline {
+  text-align: center;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.vsl-headline h1 {
+  font-size: clamp(1.25rem, 3.8vw, 1.95rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.65);
+}
+
+/* Video wrapper (Strictly 16:9) */
+.vsl-video-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 820px;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--purple-dark);
+  box-shadow:
+    0 0 50px rgba(93, 65, 112, 0.4),
+    0 25px 60px rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(220, 195, 151, 0.2);
+}
+
+.vsl-video-wrap video {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  background-color: var(--purple-dark);
+}
+
+/* ---------- Play Overlay ---------- */
+.vsl-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  background: rgba(26, 16, 32, 0.62);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.vsl-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vsl-overlay__play {
+  width: clamp(64px, 12vw, 82px);
+  height: clamp(64px, 12vw, 82px);
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--gold), var(--bronze));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 40px rgba(220, 195, 151, 0.5),
+    0 10px 28px rgba(0, 0, 0, 0.4);
+  animation: pulse-play 2.2s ease-in-out infinite;
+}
+
+.vsl-overlay__play svg {
+  width: clamp(26px, 5vw, 34px);
+  height: clamp(26px, 5vw, 34px);
+  fill: var(--purple-black);
+  margin-left: 4px; /* Optical center */
+}
+
+.vsl-overlay__text {
+  font-size: clamp(0.8rem, 2vw, 0.92rem);
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+@keyframes pulse-play {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 35px rgba(220, 195, 151, 0.45), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  50% {
+    transform: scale(1.07);
+    box-shadow: 0 0 55px rgba(220, 195, 151, 0.75), 0 14px 34px rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* ---------- Custom Controls (No-seek) ---------- */
+.vsl-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  padding: var(--sp-sm) var(--sp-md) var(--sp-md);
+  background: linear-gradient(transparent, rgba(26, 16, 32, 0.92));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.vsl-video-wrap:hover .vsl-controls,
+.vsl-controls.visible {
+  opacity: 1;
+}
+
+.vsl-controls__bar-wrap {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  margin-bottom: var(--sp-xs);
+}
+
+.vsl-controls__bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--bronze));
+  border-radius: 3px;
+  transition: width 0.25s linear;
+}
+
+.vsl-controls__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vsl-controls__hint {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gold-light);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  letter-spacing: 0.03em;
+}
+
+.vsl-controls__hint.show {
+  opacity: 1;
+}
+
+.vsl-controls__mute {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.vsl-controls__mute:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(1.06);
+}
+
+.vsl-controls__mute svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--white);
+}
+
+/* ============================================================
+   LOCKED SECTIONS (Unlocked when video ends)
+   ============================================================ */
+
+.section-locked {
+  display: none;
+  opacity: 0;
+}
+
+.section-locked.revealed {
+  display: block;
+  opacity: 1;
+  animation: sectionFadeIn 0.65s var(--ease-out) forwards;
+}
+
+@keyframes sectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   SCROLL REVEAL (IntersectionObserver based)
+   ============================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.5s var(--ease-smooth), transform 0.5s var(--ease-smooth);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered transition delays */
+.reveal[data-delay="1"] { transition-delay: 90ms; }
+.reveal[data-delay="2"] { transition-delay: 180ms; }
+.reveal[data-delay="3"] { transition-delay: 270ms; }
+.reveal[data-delay="4"] { transition-delay: 360ms; }
+
+/* ============================================================
+   SECTION 2 — Próximos Passos (Transição Fluida)
+   ============================================================ */
+
+.next-steps {
+  position: relative;
+  padding: var(--sp-3xl) 0 var(--sp-2xl);
+  background: linear-gradient(180deg, #1A1020 0%, #2D1D3A 50%, #3D2A4D 100%);
+  overflow: hidden;
+}
+
+/* ---------- First Step CTA Block (Top of Section 2) ---------- */
+.first-step-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 6vw, 3.5rem);
+  padding-bottom: clamp(2rem, 5vw, 3rem);
+  border-bottom: 1px solid rgba(220, 195, 151, 0.16);
+}
+
+.first-step-title {
+  font-size: clamp(1.5rem, 3.8vw, 2.1rem);
+  font-weight: 700;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: var(--sp-sm);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.free-eval-badge-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--sp-xl);
+}
+
+.free-eval-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #DCC397 0%, #BD916F 100%);
+  color: #1A1020;
+  font-size: clamp(0.82rem, 2vw, 0.94rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.45rem 1.25rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 18px rgba(220, 195, 151, 0.38);
+  animation: badge-subtle-glow 3s ease-in-out infinite alternate;
+}
+
+.free-eval-badge__icon {
+  width: 16px;
+  height: 16px;
+  fill: #1A1020;
+  flex-shrink: 0;
+}
+
+@keyframes badge-subtle-glow {
+  0% {
+    box-shadow: 0 4px 16px rgba(220, 195, 151, 0.35);
+  }
+  100% {
+    box-shadow: 0 6px 24px rgba(220, 195, 151, 0.65), 0 0 10px rgba(220, 195, 151, 0.4);
+  }
+}
+
+.section-title {
+  font-size: clamp(1.4rem, 3.6vw, 1.85rem);
+  font-weight: 700;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: var(--sp-md);
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.section-text {
+  font-size: clamp(0.92rem, 2vw, 1.02rem);
+  font-weight: 400;
+  color: var(--gray-light);
+  text-align: center;
+  margin-bottom: var(--sp-2xl);
+  line-height: 1.75;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 3 Steps Grid */
+.steps-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+  margin-bottom: var(--sp-2xl);
+}
+
+@media (min-width: 640px) {
+  .steps-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.step-card {
+  background: rgba(93, 65, 112, 0.22);
+  border: 1px solid rgba(220, 195, 151, 0.16);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  text-align: center;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out), border-color 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(220, 195, 151, 0.14);
+  border-color: rgba(220, 195, 151, 0.35);
+}
+
+.step-card__number {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--sp-md);
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--gold), var(--bronze));
+  color: var(--purple-black);
+  font-weight: 700;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px rgba(189, 145, 111, 0.4);
+}
+
+.step-card__title {
+  font-size: clamp(0.9rem, 2vw, 0.98rem);
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.45;
+}
+
+/* Address block */
+.address-block {
+  background: rgba(93, 65, 112, 0.2);
+  border: 1px solid rgba(220, 195, 151, 0.16);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  margin-bottom: var(--sp-xl);
+  text-align: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+}
+
+.address-block__icon {
+  font-size: 1.6rem;
+  margin-bottom: var(--sp-xs);
+}
+
+.address-block__text {
+  font-size: clamp(0.86rem, 1.8vw, 0.92rem);
+  color: var(--gray-light);
+  line-height: 1.7;
+}
+
+.address-block__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  margin-top: var(--sp-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold);
+  border-bottom: 1px solid rgba(220, 195, 151, 0.35);
+  padding-bottom: 3px;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.address-block__link:hover {
+  color: var(--gold-light);
+  border-color: var(--gold-light);
+  transform: translateX(3px);
+}
+
+/* ============================================================
+   WHATSAPP CTA BUTTONS (Pulsing Glow + Touch Target >= 48px)
+   ============================================================ */
+
+@keyframes cta-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 20px rgba(189, 145, 111, 0.4), 0 0 0 0 rgba(189, 145, 111, 0.5);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 8px 32px rgba(189, 145, 111, 0.65), 0 0 0 12px rgba(189, 145, 111, 0);
+  }
+}
+
+.cta-whatsapp-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.cta-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-sm);
+  width: 100%;
+  max-width: 420px;
+  min-height: 52px;
+  margin: 0 auto;
+  padding: clamp(0.95rem, 2.5vw, 1.15rem) clamp(1.2rem, 3vw, 2rem);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, var(--gold), var(--bronze));
+  color: var(--purple-black);
+  font-size: clamp(0.92rem, 2.2vw, 1.02rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-align: center;
+  animation: cta-pulse 1.8s ease-in-out infinite;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.cta-whatsapp::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cta-whatsapp:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 34px rgba(189, 145, 111, 0.7), 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.cta-whatsapp:hover::before {
+  opacity: 1;
+}
+
+.cta-whatsapp:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 12px rgba(189, 145, 111, 0.4);
+}
+
+.cta-whatsapp svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--purple-black);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   SECTION 3 — Prova Social (Gradiente Fluido)
+   ============================================================ */
+
+.social-proof {
+  position: relative;
+  padding: var(--sp-3xl) 0;
+  background: linear-gradient(180deg, #3D2A4D 0%, #2A1B35 50%, #23152C 100%);
+  overflow: hidden;
+}
+
+/* Google reviews header */
+.reviews-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  margin-bottom: var(--sp-2xl);
+  text-align: center;
+}
+
+.reviews-header__top {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+
+.reviews-header__rating {
+  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  font-weight: 700;
+  color: var(--white);
+}
+
+.reviews-header__stars {
+  display: flex;
+  gap: 3px;
+}
+
+.reviews-header__stars svg {
+  width: clamp(20px, 4vw, 24px);
+  height: clamp(20px, 4vw, 24px);
+  fill: #FBBC04; /* Google yellow */
+}
+
+.reviews-header__count {
+  font-size: clamp(0.82rem, 1.8vw, 0.9rem);
+  color: var(--gold-light);
+  font-weight: 500;
+}
+
+/* Review cards */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+  margin-bottom: var(--sp-3xl);
+}
+
+@media (min-width: 640px) {
+  .reviews-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.review-card {
+  background: rgba(93, 65, 112, 0.24);
+  border: 1px solid rgba(220, 195, 151, 0.16);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s var(--ease-out), border-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.review-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(220, 195, 151, 0.35);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.35);
+}
+
+.review-card__stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: var(--sp-sm);
+}
+
+.review-card__stars svg {
+  width: 17px;
+  height: 17px;
+  fill: #FBBC04;
+}
+
+.review-card__text {
+  font-size: clamp(0.88rem, 1.9vw, 0.95rem);
+  font-weight: 400;
+  color: var(--gray-light);
+  font-style: italic;
+  line-height: 1.7;
+  margin-bottom: var(--sp-md);
+}
+
+.review-card__author {
+  font-size: clamp(0.82rem, 1.8vw, 0.88rem);
+  font-weight: 600;
+  color: var(--white);
+}
+
+.review-card__source {
+  font-size: 0.74rem;
+  color: var(--gold-light);
+  margin-top: 2px;
+}
+
+/* Before / After */
+.before-after-title {
+  font-size: clamp(1.25rem, 3vw, 1.55rem);
+  font-weight: 700;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: var(--sp-lg);
+}
+
+.before-after-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .before-after-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.before-after-pair {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(220, 195, 151, 0.18);
+  background: var(--purple-deep);
+  aspect-ratio: 4 / 3;
+}
+
+.before-after-pair img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.before-after-caption {
+  font-size: clamp(0.74rem, 1.6vw, 0.82rem);
+  color: var(--gray);
+  text-align: center;
+  margin-top: var(--sp-md);
+  font-style: italic;
+  line-height: 1.6;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   SECTION 4 — CTA Final (Transição Fluida)
+   ============================================================ */
+
+.cta-final {
+  position: relative;
+  padding: var(--sp-3xl) 0;
+  background: linear-gradient(180deg, #23152C 0%, #1A1020 100%);
+  text-align: center;
+  overflow: hidden;
+}
+
+.cta-final__title {
+  font-size: clamp(1.35rem, 3.6vw, 1.85rem);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: var(--sp-xs);
+  line-height: 1.3;
+}
+
+.cta-final__sub {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: 400;
+  color: var(--gray-light);
+  margin-bottom: var(--sp-xl);
+}
+
+/* ============================================================
+   FOOTER — Compliance
+   ============================================================ */
+
+.footer-compliance {
+  padding: var(--sp-xl) 0;
+  background: #140C1A;
+  text-align: center;
+  border-top: 1px solid rgba(93, 65, 112, 0.35);
+}
+
+.footer-compliance__logo {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-xs);
+}
+
+.footer-compliance__cro {
+  font-size: 0.72rem;
+  color: var(--gray);
+  line-height: 1.75;
+}
+
+/* ============================================================
+   PREFERS-REDUCED-MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .reveal {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .cta-whatsapp {
+    animation: none !important;
+  }
+
+  .vsl-overlay__play {
+    animation: none !important;
+  }
+
+  .ambient-blob, .particle {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   SCROLLBAR & SELECTION
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--purple-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--purple);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--purple-black);
+}
