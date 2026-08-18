@@ -448,31 +448,36 @@ button {
 }
 
 .vsl-controls__btn {
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
   border: none;
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.16);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   transition: background 0.2s ease, transform 0.15s ease;
   flex-shrink: 0;
 }
 
 .vsl-controls__btn:hover {
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.32);
   transform: scale(1.06);
 }
 
 .vsl-controls__btn:active {
-  transform: scale(0.96);
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .vsl-controls__btn svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: var(--white);
   pointer-events: none;
 }
@@ -499,9 +504,11 @@ button {
   opacity: 0.6;
 }
 
-/* Fullscreen wrapper support */
+/* Fullscreen wrapper support (Native Fullscreen API) */
 .vsl-video-wrap:fullscreen,
-.vsl-video-wrap:-webkit-full-screen {
+.vsl-video-wrap:-webkit-full-screen,
+.vsl-video-wrap:-moz-full-screen,
+.vsl-video-wrap:-ms-fullscreen {
   width: 100vw;
   height: 100vh;
   max-width: none;
@@ -515,10 +522,46 @@ button {
 }
 
 .vsl-video-wrap:fullscreen video,
-.vsl-video-wrap:-webkit-full-screen video {
+.vsl-video-wrap:-webkit-full-screen video,
+.vsl-video-wrap:-moz-full-screen video,
+.vsl-video-wrap:-ms-fullscreen video {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/* Pseudo Fullscreen (Universal Mobile Fallback for iOS Safari & WebViews) */
+.vsl-video-wrap.is-pseudo-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  aspect-ratio: auto !important;
+  border-radius: 0 !important;
+  border: none !important;
+  z-index: 999999 !important;
+  background-color: #000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.vsl-video-wrap.is-pseudo-fullscreen video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+body.has-fullscreen-video {
+  overflow: hidden !important;
+  touch-action: none !important;
 }
 
 /* ============================================================

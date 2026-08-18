@@ -1,6 +1,6 @@
 /* ============================================================
-   Clínica Pollyany Policarpo — VSL Landing Page (v3)
-   Player travado 16:9 + Play/Pause + Fullscreen + Ambient Glow + Scroll Reveal + Tracking
+   Clínica Pollyany Policarpo — VSL Landing Page (v3.1)
+   Player travado 16:9 + Play/Pause + Fullscreen Mobile/Desktop + Ambient Glow + Scroll Reveal + Tracking
    ============================================================ */
 
 (function () {
@@ -186,6 +186,11 @@
     stopAmbient();
     updatePlayPauseIcon();
 
+    // Exit fullscreen if still active
+    if (isFullscreenActive()) {
+      toggleFullscreen();
+    }
+
     // Reveal hidden sections
     sections.forEach(section => {
       section.classList.add('revealed');
@@ -251,29 +256,89 @@
     }
   }
 
-  // ── Fullscreen Toggle ──
+  // ── Fullscreen Support (Desktop API + iOS Safari + CSS Pseudo-Fullscreen) ──
+  function isFullscreenActive() {
+    return !!(
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement ||
+      (videoWrap && videoWrap.classList.contains('is-pseudo-fullscreen'))
+    );
+  }
+
+  function enterPseudoFullscreen() {
+    if (!videoWrap) return;
+    videoWrap.classList.add('is-pseudo-fullscreen');
+    document.body.classList.add('has-fullscreen-video');
+    updateFullscreenIcon();
+  }
+
+  function exitPseudoFullscreen() {
+    if (!videoWrap) return;
+    videoWrap.classList.remove('is-pseudo-fullscreen');
+    document.body.classList.remove('has-fullscreen-video');
+    updateFullscreenIcon();
+  }
+
   function toggleFullscreen() {
     if (!videoWrap) return;
-    const isFull = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-    if (isFull) {
-      if (document.exitFullscreen) document.exitFullscreen();
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
-      else if (document.msExitFullscreen) document.msExitFullscreen();
+
+    if (isFullscreenActive()) {
+      // Exit fullscreen
+      if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+        const exitFn = document.exitFullscreen ||
+                       document.webkitExitFullscreen ||
+                       document.mozCancelFullScreen ||
+                       document.msExitFullscreen;
+        if (exitFn) {
+          try { exitFn.call(document); } catch (e) {}
+        }
+      }
+      exitPseudoFullscreen();
     } else {
-      if (videoWrap.requestFullscreen) videoWrap.requestFullscreen();
-      else if (videoWrap.webkitRequestFullscreen) videoWrap.webkitRequestFullscreen();
-      else if (videoWrap.mozRequestFullScreen) videoWrap.mozRequestFullScreen();
-      else if (videoWrap.msRequestFullscreen) videoWrap.msRequestFullscreen();
+      // Enter fullscreen
+      const requestFn = videoWrap.requestFullscreen ||
+                        videoWrap.webkitRequestFullscreen ||
+                        videoWrap.webkitRequestFullScreen ||
+                        videoWrap.mozRequestFullScreen ||
+                        videoWrap.msRequestFullscreen;
+
+      let usedNative = false;
+      if (requestFn) {
+        try {
+          const promise = requestFn.call(videoWrap);
+          if (promise && typeof promise.then === 'function') {
+            promise.then(() => {
+              updateFullscreenIcon();
+            }).catch(() => {
+              // Rejected (e.g. iOS Safari) -> fallback to pseudo fullscreen
+              enterPseudoFullscreen();
+            });
+            usedNative = true;
+          } else {
+            usedNative = true;
+          }
+        } catch (err) {
+          usedNative = false;
+        }
+      }
+
+      if (!usedNative) {
+        enterPseudoFullscreen();
+      }
+      updateFullscreenIcon();
     }
   }
 
   function updateFullscreenIcon() {
     if (!fullscreenSvg) return;
-    const isFull = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    const isFull = isFullscreenActive();
     if (isFull) {
+      // Compress icon
       fullscreenSvg.innerHTML = '<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>';
     } else {
+      // Expand icon
       fullscreenSvg.innerHTML = '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>';
     }
   }
@@ -305,7 +370,7 @@
     });
   }
 
-  // Play/Pause button click
+  // Play/Pause button click & touch
   if (playPauseBtn) {
     playPauseBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -313,10 +378,11 @@
     });
   }
 
-  // Fullscreen button click
+  // Fullscreen button click & touch
   if (fullscreenBtn) {
     fullscreenBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      e.preventDefault();
       toggleFullscreen();
     });
   }
@@ -363,8 +429,12 @@
     }
   }
 
-  // ── Block Seek / Allow Safe Shortcuts ──
+  // ── Keyboard Shortcuts ──
   document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isFullscreenActive()) {
+      toggleFullscreen();
+      return;
+    }
     if (!videoStarted) return;
     const blocked = ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'];
     if (blocked.includes(e.key)) {
