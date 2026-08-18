@@ -1,23 +1,28 @@
 /* ============================================================
-   Clínica Pollyany Policarpo — VSL Landing Page (v2)
-   Player travado 16:9 + Ambient Glow + Scroll Reveal + Tracking
+   Clínica Pollyany Policarpo — VSL Landing Page (v3)
+   Player travado 16:9 + Play/Pause + Fullscreen + Ambient Glow + Scroll Reveal + Tracking
    ============================================================ */
 
 (function () {
   'use strict';
 
   // ── References ──
-  const video       = document.getElementById('vsl-video');
-  const overlay     = document.getElementById('vsl-overlay');
-  const ambientEl   = document.querySelector('.vsl-ambient');
-  const barFill     = document.querySelector('.vsl-controls__bar-fill');
-  const hintEl      = document.querySelector('.vsl-controls__hint');
-  const controlsEl  = document.querySelector('.vsl-controls');
-  const muteBtn     = document.getElementById('btn-mute');
-  const muteSvg     = document.getElementById('mute-icon');
-  const sections    = document.querySelectorAll('.section-locked');
-  const ctaButtons  = document.querySelectorAll('.cta-whatsapp');
-  const revealEls   = document.querySelectorAll('.reveal');
+  const videoWrap     = document.querySelector('.vsl-video-wrap');
+  const video         = document.getElementById('vsl-video');
+  const overlay       = document.getElementById('vsl-overlay');
+  const ambientEl     = document.querySelector('.vsl-ambient');
+  const barFill       = document.querySelector('.vsl-controls__bar-fill');
+  const hintEl        = document.querySelector('.vsl-controls__hint');
+  const controlsEl    = document.querySelector('.vsl-controls');
+  const playPauseBtn  = document.getElementById('btn-play-pause');
+  const playPauseSvg  = document.getElementById('play-pause-icon');
+  const muteBtn       = document.getElementById('btn-mute');
+  const muteSvg       = document.getElementById('mute-icon');
+  const fullscreenBtn = document.getElementById('btn-fullscreen');
+  const fullscreenSvg = document.getElementById('fullscreen-icon');
+  const sections      = document.querySelectorAll('.section-locked');
+  const ctaButtons    = document.querySelectorAll('.cta-whatsapp');
+  const revealEls     = document.querySelectorAll('.reveal');
 
   // ── UTM Capture ──
   const urlParams  = new URLSearchParams(window.location.search);
@@ -32,9 +37,12 @@
   // ── State ──
   let videoStarted  = false;
   let videoEnded    = false;
+  let isPaused      = false;
   let demoMode      = false;
   let demoTimer     = null;
+  let colorCycle    = null;
   let demoStart     = 0;
+  let demoElapsed   = 0;
   const DEMO_DURATION = 18; // seconds for demo playback
 
   // Tracking milestone flags
@@ -56,7 +64,6 @@
 
     revealEls.forEach(el => revealObserver.observe(el));
   } else {
-    // Fallback for older browsers
     revealEls.forEach(el => el.classList.add('is-visible'));
   }
 
@@ -86,7 +93,7 @@
         b = Math.round(b / n);
         ambientEl.style.setProperty('--ambient-color', `rgb(${r}, ${g}, ${b})`);
       } catch (e) {
-        // Fallback for CORS or canvas errors
+        // Fallback
       }
     }, 150);
   }
@@ -100,7 +107,6 @@
 
   // ── Progress Bar (concave curve) ──
   function updateProgress(realProgress) {
-    // Concave curve: fast early progress, builds anticipation
     const displayed = Math.pow(Math.min(realProgress, 1), 0.4);
     if (barFill) {
       barFill.style.width = `${displayed * 100}%`;
@@ -108,7 +114,10 @@
 
     // Hint text in last 20%
     if (hintEl) {
-      if (realProgress >= 0.9) {
+      if (isPaused) {
+        hintEl.textContent = 'Pausado';
+        hintEl.classList.add('show');
+      } else if (realProgress >= 0.9) {
         hintEl.textContent = 'Só mais um pouco...';
         hintEl.classList.add('show');
       } else if (realProgress >= 0.8) {
@@ -129,40 +138,53 @@
   }
 
   // ── Demo Mode (no real video file present) ──
-  function startDemoMode() {
-    demoMode = true;
-    demoStart = Date.now();
-    if (controlsEl) controlsEl.classList.add('visible');
+  const demoColors = ['#5D4170', '#BD916F', '#DCC397', '#FFDBBA', '#3D2A4D'];
+  let colorIdx = 0;
 
-    // Animate ambient colors through luxury brand palette
-    const colors = ['#5D4170', '#BD916F', '#DCC397', '#FFDBBA', '#3D2A4D'];
-    let colorIdx = 0;
-    const colorCycle = setInterval(() => {
-      if (!demoMode) { clearInterval(colorCycle); return; }
-      if (ambientEl) ambientEl.style.setProperty('--ambient-color', colors[colorIdx % colors.length]);
+  function runDemoColorCycle() {
+    if (colorCycle) clearInterval(colorCycle);
+    colorCycle = setInterval(() => {
+      if (!demoMode || isPaused) return;
+      if (ambientEl) ambientEl.style.setProperty('--ambient-color', demoColors[colorIdx % demoColors.length]);
       colorIdx++;
     }, 2500);
+  }
 
-    // Progress loop
+  function runDemoTimer() {
+    if (demoTimer) clearInterval(demoTimer);
     demoTimer = setInterval(() => {
-      const elapsed = (Date.now() - demoStart) / 1000;
+      if (isPaused) return;
+      const elapsed = ((Date.now() - demoStart) / 1000);
+      demoElapsed = elapsed;
       const progress = Math.min(elapsed / DEMO_DURATION, 1);
       updateProgress(progress);
 
       if (progress >= 1) {
         clearInterval(demoTimer);
-        clearInterval(colorCycle);
+        if (colorCycle) clearInterval(colorCycle);
         demoMode = false;
         onVideoEnded();
       }
     }, 100);
   }
 
+  function startDemoMode() {
+    demoMode = true;
+    isPaused = false;
+    demoStart = Date.now() - (demoElapsed * 1000);
+    if (controlsEl) controlsEl.classList.add('visible');
+    runDemoColorCycle();
+    runDemoTimer();
+    updatePlayPauseIcon();
+  }
+
   // ── Video Events ──
   function onVideoEnded() {
     if (videoEnded) return;
     videoEnded = true;
+    isPaused = false;
     stopAmbient();
+    updatePlayPauseIcon();
 
     // Reveal hidden sections
     sections.forEach(section => {
@@ -178,15 +200,99 @@
     }, 300);
   }
 
+  // ── Play / Pause Toggle ──
+  function togglePlayPause() {
+    if (!videoStarted || videoEnded) return;
+
+    if (demoMode) {
+      if (isPaused) {
+        isPaused = false;
+        demoStart = Date.now() - (demoElapsed * 1000);
+        runDemoColorCycle();
+        runDemoTimer();
+      } else {
+        isPaused = true;
+        demoElapsed = (Date.now() - demoStart) / 1000;
+        if (demoTimer) clearInterval(demoTimer);
+        if (colorCycle) clearInterval(colorCycle);
+      }
+      updatePlayPauseIcon();
+      updateProgress(demoElapsed / DEMO_DURATION);
+      return;
+    }
+
+    if (video) {
+      if (video.paused) {
+        video.play().then(() => {
+          isPaused = false;
+          updatePlayPauseIcon();
+          startAmbient();
+        }).catch(() => {});
+      } else {
+        video.pause();
+        isPaused = true;
+        updatePlayPauseIcon();
+        stopAmbient();
+      }
+      if (video.duration) {
+        updateProgress(video.currentTime / video.duration);
+      }
+    }
+  }
+
+  function updatePlayPauseIcon() {
+    if (!playPauseSvg) return;
+    if (isPaused) {
+      // Show Play icon
+      playPauseSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    } else {
+      // Show Pause icon
+      playPauseSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+    }
+  }
+
+  // ── Fullscreen Toggle ──
+  function toggleFullscreen() {
+    if (!videoWrap) return;
+    const isFull = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    if (isFull) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+      else if (document.msExitFullscreen) document.msExitFullscreen();
+    } else {
+      if (videoWrap.requestFullscreen) videoWrap.requestFullscreen();
+      else if (videoWrap.webkitRequestFullscreen) videoWrap.webkitRequestFullscreen();
+      else if (videoWrap.mozRequestFullScreen) videoWrap.mozRequestFullScreen();
+      else if (videoWrap.msRequestFullscreen) videoWrap.msRequestFullscreen();
+    }
+  }
+
+  function updateFullscreenIcon() {
+    if (!fullscreenSvg) return;
+    const isFull = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    if (isFull) {
+      fullscreenSvg.innerHTML = '<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>';
+    } else {
+      fullscreenSvg.innerHTML = '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>';
+    }
+  }
+
+  document.addEventListener('fullscreenchange', updateFullscreenIcon);
+  document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+  document.addEventListener('mozfullscreenchange', updateFullscreenIcon);
+  document.addEventListener('MSFullscreenChange', updateFullscreenIcon);
+
   // ── Overlay Click → Play ──
   if (overlay) {
     overlay.addEventListener('click', () => {
       overlay.classList.add('hidden');
       if (controlsEl) controlsEl.classList.add('visible');
       videoStarted = true;
+      isPaused = false;
+      updatePlayPauseIcon();
 
       if (video && video.readyState >= 2) {
-        // Real video loaded
         video.muted = false;
         video.play().catch(() => {
           video.muted = true;
@@ -194,9 +300,24 @@
         });
         startAmbient();
       } else {
-        // No video file — enter demo mode smoothly
         startDemoMode();
       }
+    });
+  }
+
+  // Play/Pause button click
+  if (playPauseBtn) {
+    playPauseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePlayPause();
+    });
+  }
+
+  // Fullscreen button click
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleFullscreen();
     });
   }
 
@@ -212,13 +333,21 @@
     video.addEventListener('ended', onVideoEnded);
 
     video.addEventListener('play', () => {
+      isPaused = false;
+      updatePlayPauseIcon();
       if (controlsEl) controlsEl.classList.add('visible');
+    });
+
+    video.addEventListener('pause', () => {
+      isPaused = true;
+      updatePlayPauseIcon();
     });
   }
 
   // ── Mute / Unmute ──
   if (muteBtn) {
-    muteBtn.addEventListener('click', () => {
+    muteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (demoMode || !video) return;
       video.muted = !video.muted;
       updateMuteIcon();
@@ -234,20 +363,29 @@
     }
   }
 
-  // ── Block Seek / Keyboard Shortcuts ──
+  // ── Block Seek / Allow Safe Shortcuts ──
   document.addEventListener('keydown', (e) => {
     if (!videoStarted) return;
-    const blocked = ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', ' '];
+    const blocked = ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'];
     if (blocked.includes(e.key)) {
       e.preventDefault();
       e.stopPropagation();
     }
-    // Allow 'M' for mute toggle
+    // Space toggles Play/Pause
+    if (e.key === ' ' || e.code === 'Space') {
+      e.preventDefault();
+      togglePlayPause();
+    }
+    // 'M' for mute toggle
     if (e.key === 'm' || e.key === 'M') {
       if (!demoMode && video) {
         video.muted = !video.muted;
         updateMuteIcon();
       }
+    }
+    // 'F' for fullscreen toggle
+    if (e.key === 'f' || e.key === 'F') {
+      toggleFullscreen();
     }
   });
 
