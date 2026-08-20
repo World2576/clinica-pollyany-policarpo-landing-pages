@@ -628,10 +628,14 @@ body::before {
   margin-right: auto;
 }
 
-/* Card Reverso (Foto na direita): margin-left auto empurra o texto para junto da foto na direita, sobra na esquerda */
+/* Card Reverso (Foto na direita): texto com respiro elegante de 1.35rem da borda esquerda */
 .hub-card--doctor.hub-card--doctor-reverse .hub-card__doctor-info {
+  margin-left: 1.35rem;
+  margin-right: auto;
+}
+
+.hub-card--doctor.hub-card--doctor-reverse .hub-card__doctor-photo-wrap {
   margin-left: auto;
-  margin-right: 18px;
 }
 
 /* Nome do doutor aumentado (+30%) com dominância e text-wrap balance */
