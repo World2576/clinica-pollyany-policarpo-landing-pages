@@ -550,14 +550,14 @@ body::before {
   }
 }
 
-/* ---------- ITEM 1: Cards dos Doutores (Foto Inteira + Textos Grandes Sem Setinha) ---------- */
+/* ---------- ITEM 1: Cards dos Doutores (Foto Inteira + Textos Grandes Preenchendo Todo o Espaço) ---------- */
 .hub-card--doctor {
   width: 100%;
-  min-height: 125px;
+  min-height: 135px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0.4rem 1.25rem 0 0; /* sem padding inferior para ancorar no fundo */
+  padding: 0.35rem 1.35rem 0 0; /* sem padding inferior para ancorar no fundo */
   background: linear-gradient(135deg, rgba(61, 42, 77, 0.9) 0%, rgba(42, 27, 53, 0.98) 100%);
   border: 1px solid var(--gold-border);
   border-radius: var(--radius-md);
@@ -587,27 +587,27 @@ body::before {
   align-items: flex-end;
   flex: 1;
   height: 100%;
-  min-height: 125px;
+  min-height: 135px;
 }
 
 /* Container da foto ancorada na borda inferior do botão */
 .hub-card__doctor-photo-wrap {
-  width: 100px;
-  height: 125px;
+  width: 105px;
+  height: 135px;
   flex-shrink: 0;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   margin-left: 0.5rem;
-  margin-right: 1.15rem;
+  margin-right: 1.25rem;
   overflow: visible;
   pointer-events: none;
 }
 
 .hub-card__doctor-img {
   width: auto;
-  height: 125px;
-  max-width: 100px;
+  height: 135px;
+  max-width: 105px;
   object-fit: contain;
   object-position: bottom center;
   display: block;
@@ -618,25 +618,27 @@ body::before {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
   flex: 1;
   text-align: left;
-  padding: 0.85rem 1.15rem 0.85rem 0;
+  padding: 1.15rem 1.35rem 1.15rem 0;
+  height: 100%;
 }
 
 .hub-card__doctor-info .hub-card__title {
-  font-size: 1.24rem;
+  font-size: 1.45rem;
   font-weight: 700;
   color: var(--white);
-  line-height: 1.22;
-  letter-spacing: -0.01em;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
 }
 
 .hub-card__doctor-info .hub-card__sub {
-  font-size: 0.94rem;
+  font-size: 1.05rem;
   font-weight: 500;
   color: var(--gold-light);
   line-height: 1.35;
-  margin-top: 5px;
+  margin-top: 6px;
   opacity: 0.95;
 }
 
@@ -711,7 +713,7 @@ body::before {
   transform: scale(1.15) translateY(-2px);
 }
 
-/* ---------- Card de Localização (Layout Lateral Original Restaurado sem Cortar a Fachada) ---------- */
+/* ---------- Card de Localização (Layout Lateral com Imagem Transparente sem Fundo Roxo Artificial) ---------- */
 .hub-card--location {
   width: 100%;
   min-height: 145px;
@@ -801,15 +803,16 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1A1020;
+  background: transparent !important;
 }
 
 .location-card__img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: left center;
+  object-fit: contain;
+  object-position: center right;
   display: block;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.45));
   transition: transform 0.35s var(--ease-out);
 }
 
