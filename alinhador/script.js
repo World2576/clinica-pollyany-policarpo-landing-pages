@@ -467,38 +467,4 @@
     });
   }
 
-  // ── Tracking ──
-  function trackVideoMilestone(pct) {
-    if (typeof fbq === 'function') {
-      fbq('trackCustom', `VideoProgress${pct}`, {
-        procedure: document.body.dataset.procedure || '',
-        ...utmData
-      });
-    }
-    console.log(`[VSL Track] Video ${pct}%`);
-  }
-
-  function trackContact() {
-    if (typeof fbq === 'function') {
-      fbq('track', 'Contact', {
-        procedure: document.body.dataset.procedure || '',
-        ...utmData
-      });
-    }
-    if (typeof gtag === 'function') {
-      gtag('event', 'conversion', {
-        'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL',
-        'event_callback': function () { }
-      });
-    }
-    console.log('[VSL Track] Contact / WhatsApp click');
-  }
-
-  // CTA button clicks
-  ctaButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      trackContact();
-    });
-  });
-
 })();

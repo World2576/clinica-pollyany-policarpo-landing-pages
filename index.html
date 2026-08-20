@@ -1,185 +1,693 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Landing Pages — Clínica Pollyany Policarpo Odontologia</title>
-  <meta name="robots" content="noindex, nofollow">
+  <title>Clínica Pollyany Policarpo Odontologia — Links Oficiais</title>
+  <meta name="description"
+    content="Acesse os canais oficiais, conheça nossa equipe de especialistas, procedimentos odontológicos e agende sua avaliação na Clínica Pollyany Policarpo em São Pedro/SP.">
   <meta name="theme-color" content="#1A1020">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Clínica Pollyany Policarpo Odontologia">
+  <meta property="og:description"
+    content="Agendamentos, equipe de especialistas, procedimentos e localização em São Pedro/SP.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/logo-pollyany.png">
+
+  <!-- Preconnect & Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --purple: #5D4170;
-      --purple-dark: #3D2A4D;
-      --purple-deep: #2A1B35;
-      --purple-black: #1A1020;
-      --gold: #DCC397;
-      --gold-light: #E8D5B3;
-      --bronze: #BD916F;
-      --white: #FAFAF8;
-      --gray-light: #C5BCC9;
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at 50% 20%, #3D2A4D 0%, #1A1020 70%);
-      color: var(--white);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1.25rem;
-      position: relative;
-      overflow-x: hidden;
-    }
-    .hub-card-container {
-      width: 100%;
-      max-width: 680px;
-      background: rgba(42, 27, 53, 0.75);
-      border: 1px solid rgba(220, 195, 151, 0.22);
-      border-radius: 24px;
-      padding: clamp(1.75rem, 5vw, 2.75rem);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-      text-align: center;
-    }
-    .hub-logo {
-      max-width: 190px;
-      height: auto;
-      margin-bottom: 1.5rem;
-    }
-    .badge-review {
-      display: inline-block;
-      background: rgba(220, 195, 151, 0.16);
-      border: 1px solid rgba(220, 195, 151, 0.35);
-      color: var(--gold);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 0.35rem 0.9rem;
-      border-radius: 999px;
-      margin-bottom: 1.25rem;
-    }
-    h1 {
-      font-size: clamp(1.4rem, 3.8vw, 1.85rem);
-      font-weight: 700;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-      line-height: 1.3;
-    }
-    p.subtitle {
-      font-size: clamp(0.88rem, 2vw, 0.96rem);
-      color: var(--gray-light);
-      line-height: 1.6;
-      margin-bottom: 2rem;
-    }
-    .links-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .page-link-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.15rem 1.5rem;
-      background: rgba(93, 65, 112, 0.25);
-      border: 1px solid rgba(220, 195, 151, 0.2);
-      border-radius: 16px;
-      text-decoration: none;
-      color: var(--white);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .page-link-card:hover {
-      background: rgba(93, 65, 112, 0.45);
-      border-color: var(--gold);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(220, 195, 151, 0.18);
-    }
-    .page-link-info {
-      text-align: left;
-    }
-    .page-link-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 0.2rem;
-    }
-    .page-link-desc {
-      font-size: 0.8rem;
-      color: var(--gray-light);
-    }
-    .page-link-arrow {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold), var(--bronze));
-      color: var(--purple-black);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      transition: transform 0.2s ease;
-    }
-    .page-link-card:hover .page-link-arrow {
-      transform: translateX(4px);
-    }
-    .hub-footer {
-      margin-top: 2rem;
-      font-size: 0.78rem;
-      color: rgba(197, 188, 201, 0.7);
-      line-height: 1.5;
-    }
-  </style>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Universal Tracking Module -->
+  <script src="tracking.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
+
 <body>
-  <main class="hub-card-container">
-    <img src="implante/assets/logo-pollyany.png" alt="Clínica Pollyany Policarpo" class="hub-logo">
-    <div class="badge-review">Versão de Revisão & Aprovação</div>
-    <h1>Landing Pages Institucionais</h1>
-    <p class="subtitle">Selecione uma das páginas abaixo para navegar, revisar os textos, estrutura e identidade visual.</p>
 
-    <div class="links-grid">
-      <a href="implante/" class="page-link-card">
-        <div class="page-link-info">
-          <div class="page-link-title">Implante Dentário</div>
-          <div class="page-link-desc">Recupere seu sorriso com segurança e naturalidade</div>
-        </div>
-        <div class="page-link-arrow">→</div>
-      </a>
+  <!-- Floating Atmosphere Elements -->
+  <div class="ambient-blob-wrap" aria-hidden="true">
+    <div class="ambient-blob ambient-blob--1"></div>
+    <div class="ambient-blob ambient-blob--2"></div>
+  </div>
 
-      <a href="alinhador/" class="page-link-card">
-        <div class="page-link-info">
-          <div class="page-link-title">Alinhador Invisível</div>
-          <div class="page-link-desc">Corrija seus dentes com discrição, conforto e praticidade</div>
-        </div>
-        <div class="page-link-arrow">→</div>
-      </a>
+  <!-- Enhanced 18 Gold Particles -->
+  <div class="brand-particles" aria-hidden="true">
+    <span class="particle particle--1"></span>
+    <span class="particle particle--2"></span>
+    <span class="particle particle--3"></span>
+    <span class="particle particle--4"></span>
+    <span class="particle particle--5"></span>
+    <span class="particle particle--6"></span>
+    <span class="particle particle--7"></span>
+    <span class="particle particle--8"></span>
+    <span class="particle particle--9"></span>
+    <span class="particle particle--10"></span>
+    <span class="particle particle--11"></span>
+    <span class="particle particle--12"></span>
+    <span class="particle particle--13"></span>
+    <span class="particle particle--14"></span>
+    <span class="particle particle--15"></span>
+    <span class="particle particle--16"></span>
+    <span class="particle particle--17"></span>
+    <span class="particle particle--18"></span>
+  </div>
 
-      <a href="preenchimento-labial/" class="page-link-card">
-        <div class="page-link-info">
-          <div class="page-link-title">Preenchimento Labial</div>
-          <div class="page-link-desc">Lábios naturais, com o volume que combina com você</div>
-        </div>
-        <div class="page-link-arrow">→</div>
+  <!-- Main Container -->
+  <main class="hub-wrapper">
+
+    <!-- 1. Header with Official Brand Logo (Original PNG) -->
+    <header class="hub-header">
+      <a href="/" class="hub-logo-link" aria-label="Página inicial Clínica Pollyany Policarpo">
+        <img src="assets/logo-pollyany.png" alt="Clínica Pollyany Policarpo Odontologia" class="hub-logo" width="210" height="68">
       </a>
+    </header>
+
+    <!-- 2. Clinic Presentation Video (YouTube Shorts 9:16 Embed with Lazy Load) -->
+    <section class="video-stage-container" aria-label="Vídeo de Apresentação da Clínica">
+      <div class="video-ambient-glow" aria-hidden="true"></div>
+
+      <div class="video-frame-wrap video-frame-wrap--shorts">
+        <!-- Lazy Thumbnail / Play Trigger -->
+        <div class="video-lazy-placeholder"
+             data-yt-id="JThTmm9bNH8"
+             data-video-name="clinica"
+             style="background-image: url('https://img.youtube.com/vi/JThTmm9bNH8/hqdefault.jpg');"
+             role="button"
+             tabindex="0"
+             aria-label="Assistir apresentação da clínica">
+          <div class="play-btn-circle">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+          <span class="video-lazy-label">Conheça nossa clínica</span>
+        </div>
+
+        <!-- Frame Target Container -->
+        <div class="video-iframe-slot"></div>
+      </div>
+    </section>
+
+    <!-- 3. Google Reviews Badge -->
+    <a href="https://g.page/r/CSU_BwaqazslEBM"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="badge-review-link"
+       data-track="clique_avaliacao"
+       data-track-local="selo"
+       aria-label="113 avaliações 5 estrelas no Google">
+      <span class="stars-group" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </span>
+      <span class="badge-review-score">5,0</span>
+      <span class="badge-review-text">· 113 avaliações no Google</span>
+    </a>
+
+    <!-- 4. Grouped Buttons Section (3-Level Hierarchy) -->
+    <div class="buttons-hub-container">
+
+      <!-- Grupo: Agendamento e Localização -->
+      <section class="button-group-section" aria-label="Agendamento e Localização">
+        <span class="group-section-tag">Agendamento & Localização</span>
+
+        <!-- Nível 1: WhatsApp Principal Destaque Máximo -->
+        <a href="https://wa.me/5519997916964?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Cl%C3%ADnica%20Pollyany%20Policarpo%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o."
+           target="_blank"
+           rel="noopener noreferrer"
+           class="hub-btn--level-1 cascade-item delay-1"
+           data-track="clique_whatsapp"
+           data-track-local="arvore_principal">
+          <div style="display:flex; align-items:center; gap:0.95rem; text-align:left;">
+            <span class="hub-btn__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </span>
+            <div style="display:flex; flex-direction:column;">
+              <span class="hub-btn__title">Agendar pelo WhatsApp</span>
+              <span class="hub-btn__sub">Atendimento rápido com nossa equipe</span>
+            </div>
+          </div>
+          <span style="color:#FFF; opacity:0.85;" aria-hidden="true">
+            <svg style="width:20px; height:20px; fill:currentColor;" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+
+        <!-- Nível 2: Card de Localização com Fachada Inteira sem Degradê Divisório -->
+        <a href="https://share.google/N2lSpgDusnLWNgW2X"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="hub-card--location cascade-item delay-2"
+           data-track="clique_localizacao"
+           data-track-local="arvore">
+          <div class="location-card__content">
+            <span class="location-card__tag">Localização</span>
+            <h2 class="location-card__headline">Venha conhecer nossa clínica</h2>
+            <div class="location-card__pill">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span>Google Maps</span>
+            </div>
+            <p class="location-card__address">
+              Rua José Estanislau de Oliveira, 926<br>Centro · São Pedro/SP
+            </p>
+          </div>
+          <div class="location-card__image-wrap">
+            <img src="assets/fachada-clinica.png" alt="Fachada da Clínica Pollyany Policarpo" class="location-card__img" loading="lazy" width="230" height="150">
+          </div>
+        </a>
+      </section>
+
+      <!-- Grupo: Nossa Equipe (Item 1: Fotos Inteiras e Grandes Ancoradas na Borda Inferior) -->
+      <section class="button-group-section" aria-label="Nossa Equipe de Especialistas">
+        <span class="group-section-tag">Nossa Equipe</span>
+
+        <!-- 1. Dra. Pollyany Policarpo -->
+        <a href="equipe/dra-pollyany-policarpo/"
+           class="hub-card--doctor cascade-item delay-3"
+           data-track="clique_doutor"
+           data-track-local="dra-pollyany-policarpo">
+          <div class="hub-card__doctor-body">
+            <div class="hub-card__doctor-photo-wrap">
+              <img src="assets/dra-pollyany-trimmed.png" alt="Dra. Pollyany Policarpo" class="hub-card__doctor-img" loading="eager">
+            </div>
+            <div class="hub-card__doctor-info">
+              <span class="hub-card__title">Dra. Pollyany Policarpo</span>
+              <span class="hub-card__sub">Ortodontia e Implantodontia</span>
+            </div>
+          </div>
+          <span class="hub-card__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+
+        <!-- 2. Dr. Naydson Pereira -->
+        <a href="equipe/dr-naydson-pereira/"
+           class="hub-card--doctor cascade-item delay-4"
+           data-track="clique_doutor"
+           data-track-local="dr-naydson-pereira">
+          <div class="hub-card__doctor-body">
+            <div class="hub-card__doctor-photo-wrap">
+              <img src="assets/dr-naydson-trimmed.png" alt="Dr. Naydson Pereira" class="hub-card__doctor-img" loading="eager">
+            </div>
+            <div class="hub-card__doctor-info">
+              <span class="hub-card__title">Dr. Naydson Pereira</span>
+              <span class="hub-card__sub">Clínico Geral e Prótese</span>
+            </div>
+          </div>
+          <span class="hub-card__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+
+        <!-- 3. Dr. Yuri Gonçalves -->
+        <a href="equipe/dr-yuri-goncalves/"
+           class="hub-card--doctor cascade-item delay-5"
+           data-track="clique_doutor"
+           data-track-local="dr-yuri-goncalves">
+          <div class="hub-card__doctor-body">
+            <div class="hub-card__doctor-photo-wrap">
+              <img src="assets/dr-yuri-trimmed.png" alt="Dr. Yuri Gonçalves" class="hub-card__doctor-img" loading="eager">
+            </div>
+            <div class="hub-card__doctor-info">
+              <span class="hub-card__title">Dr. Yuri Gonçalves</span>
+              <span class="hub-card__sub">Clínico Geral e Diagnóstico</span>
+            </div>
+          </div>
+          <span class="hub-card__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+
+        <!-- 4. Dr. Itaiuã Tezoto -->
+        <a href="equipe/dr-itaiua-tezoto/"
+           class="hub-card--doctor cascade-item delay-6"
+           data-track="clique_doutor"
+           data-track-local="dr-itaiua-tezoto">
+          <div class="hub-card__doctor-body">
+            <div class="hub-card__doctor-photo-wrap">
+              <img src="assets/dr-itaiua-trimmed.png" alt="Dr. Itaiuã Tezoto" class="hub-card__doctor-img" loading="eager">
+            </div>
+            <div class="hub-card__doctor-info">
+              <span class="hub-card__title">Dr. Itaiuã Tezoto</span>
+              <span class="hub-card__sub">Endodontia (Tratamento de Canal)</span>
+            </div>
+          </div>
+          <span class="hub-card__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+      </section>
+
+      <!-- Grupo: Conheça os Procedimentos (Item 10.1: Ícones 3D em WebP) -->
+      <section class="button-group-section" aria-label="Procedimentos Odontológicos">
+        <span class="group-section-tag">Conheça os Procedimentos</span>
+
+        <!-- Implante -->
+        <a href="implante/"
+           class="hub-card--proc cascade-item delay-7"
+           data-track="clique_procedimento"
+           data-track-local="implante">
+          <div style="display:flex; align-items:center; flex:1;">
+            <div class="hub-card__proc-3d-wrap">
+              <img src="assets/icon-implante-3d.webp" alt="Implante Dentário 3D" class="hub-card__proc-3d-img" width="54" height="54" loading="lazy">
+            </div>
+            <div class="hub-card__info">
+              <span class="hub-card__title">Conheça o Implante Dentário</span>
+              <span class="hub-card__sub">Recupere a segurança para sorrir e mastigar</span>
+            </div>
+          </div>
+          <span class="hub-card__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+
+        <!-- Alinhador -->
+        <a href="alinhador/"
+           class="hub-card--proc cascade-item delay-8"
+           data-track="clique_procedimento"
+           data-track-local="alinhador">
+          <div style="display:flex; align-items:center; flex:1;">
+            <div class="hub-card__proc-3d-wrap">
+              <img src="assets/icon-alinhador-3d.webp" alt="Alinhador Invisível 3D" class="hub-card__proc-3d-img" width="54" height="54" loading="lazy">
+            </div>
+            <div class="hub-card__info">
+              <span class="hub-card__title">Conheça o Alinhador Invisível</span>
+              <span class="hub-card__sub">Dentes alinhados com discrição e conforto</span>
+            </div>
+          </div>
+          <span class="hub-card__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+
+        <!-- Preenchimento Labial -->
+        <a href="preenchimento-labial/"
+           class="hub-card--proc cascade-item delay-9"
+           data-track="clique_procedimento"
+           data-track-local="preenchimento_labial">
+          <div style="display:flex; align-items:center; flex:1;">
+            <div class="hub-card__proc-3d-wrap">
+              <img src="assets/icon-preenchimento-3d.webp" alt="Preenchimento Labial 3D" class="hub-card__proc-3d-img" width="54" height="54" loading="lazy">
+            </div>
+            <div class="hub-card__info">
+              <span class="hub-card__title">Conheça o Preenchimento Labial</span>
+              <span class="hub-card__sub">Volume natural e harmonia para o seu rosto</span>
+            </div>
+          </div>
+          <span class="hub-card__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+      </section>
+
+      <!-- Grupo: Redes Sociais (Item 10.2: Apresentação 3D de Marcas Oficiais) -->
+      <section class="button-group-section" aria-label="Nossas Redes Sociais">
+        <span class="group-section-tag">Redes Sociais</span>
+
+        <!-- Instagram da Clínica -->
+        <a href="https://www.instagram.com/clinicapollyanypolicarpo/"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="hub-btn--level-3 cascade-item delay-10"
+           data-track="clique_rede_social"
+           data-track-local="instagram_clinica">
+          <div style="display:flex; align-items:center; gap:0.85rem;">
+            <span class="brand-3d-badge brand-3d-badge--instagram" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </span>
+            <div style="display:flex; flex-direction:column;">
+              <span class="hub-btn__title">Instagram</span>
+              <span class="hub-btn__sub">@clinicapollyanypolicarpo</span>
+            </div>
+          </div>
+          <span class="hub-btn__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/ClinicaPollyanyPolicarpo"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="hub-btn--level-3 cascade-item delay-11"
+           data-track="clique_rede_social"
+           data-track-local="facebook">
+          <div style="display:flex; align-items:center; gap:0.85rem;">
+            <span class="brand-3d-badge brand-3d-badge--facebook" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </span>
+            <div style="display:flex; flex-direction:column;">
+              <span class="hub-btn__title">Facebook</span>
+              <span class="hub-btn__sub">/ClinicaPollyanyPolicarpo</span>
+            </div>
+          </div>
+          <span class="hub-btn__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+      </section>
+
+      <!-- Grupo: Avaliação (Item 10.2: Apresentação 3D com Logo Oficial do Google 4 Cores) -->
+      <section class="button-group-section" aria-label="Avaliação no Google">
+        <span class="group-section-tag">Avaliação</span>
+
+        <!-- Deixe sua avaliação no Google -->
+        <a href="https://g.page/r/CSU_BwaqazslEBM/review"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="hub-btn--level-3 cascade-item delay-12"
+           data-track="clique_avaliacao"
+           data-track-local="arvore">
+          <div style="display:flex; align-items:center; gap:0.85rem;">
+            <span class="brand-3d-badge brand-3d-badge--google" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/>
+                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.04 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+              </svg>
+            </span>
+            <div style="display:flex; flex-direction:column;">
+              <span class="hub-btn__title">Deixe sua avaliação no Google</span>
+              <span class="hub-btn__sub">Sua opinião é muito importante para nós</span>
+            </div>
+          </div>
+          <span class="hub-btn__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </span>
+        </a>
+      </section>
+
     </div>
 
+    <!-- 5. Avaliações do Google (Item 7: Carrossel Automático Contínuo Marquee) -->
+    <section class="reviews-section-hub" aria-label="Depoimentos de Pacientes">
+      <h2 class="reviews-section-title">O que nossos pacientes dizem</h2>
+
+      <div class="reviews-marquee-wrap" id="reviews-marquee-wrap" role="region" aria-label="Carrossel contínuo de avaliações de pacientes">
+        <div class="reviews-marquee-track">
+          
+          <!-- Card 1 -->
+          <article class="review-hub-card">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">C</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Carlos Augusto da Silva</p>
+                <div class="review-hub-card__stars" aria-label="5 estrelas">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Estive na clínica por uma dor de dente repentina e fui muito bem cuidado, apesar de estar a passeio na cidade."</p>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="review-hub-card">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">S</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Suely Carvalho</p>
+                <div class="review-hub-card__stars" aria-label="5 estrelas">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Excelente! Clínica odontológica com alta tecnologia! Muito confortável! Ótimo atendimento!"</p>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="review-hub-card">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">J</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">José Antonio Gomes</p>
+                <div class="review-hub-card__stars" aria-label="5 estrelas">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Excelente. Você é bem informado e orientado. Passam segurança, confiança e tranquilidade nos procedimentos. Eu indico. Parabéns."</p>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="review-hub-card">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">I</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Izamara Montanari</p>
+                <div class="review-hub-card__stars" aria-label="5 estrelas">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Atendimento excelente, profissional maravilhosa."</p>
+          </article>
+
+          <!-- Card 5 -->
+          <article class="review-hub-card">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">J</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Joabbe Steffan</p>
+                <div class="review-hub-card__stars" aria-label="5 estrelas">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Profissional fantástica e tratamento de altíssimo nível!"</p>
+          </article>
+
+          <!-- Card 6 -->
+          <article class="review-hub-card">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">M</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Marcello Monteiro van Cleef</p>
+                <div class="review-hub-card__stars" aria-label="5 estrelas">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"A clínica é maravilhosa, muito organizada e limpa. Fui atendido em uma situação de urgência e recebi todo o cuidado necessário com muita agilidade e atenção. As recepcionistas também merecem destaque: muito educadas, prestativas e acolhedoras desde o primeiro contato."</p>
+          </article>
+
+          <!-- Duplicated Cards for Seamless Infinite Loop (Marquee) -->
+          <article class="review-hub-card" aria-hidden="true">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">C</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Carlos Augusto da Silva</p>
+                <div class="review-hub-card__stars">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Estive na clínica por uma dor de dente repentina e fui muito bem cuidado, apesar de estar a passeio na cidade."</p>
+          </article>
+
+          <article class="review-hub-card" aria-hidden="true">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">S</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Suely Carvalho</p>
+                <div class="review-hub-card__stars">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Excelente! Clínica odontológica com alta tecnologia! Muito confortável! Ótimo atendimento!"</p>
+          </article>
+
+          <article class="review-hub-card" aria-hidden="true">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">J</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">José Antonio Gomes</p>
+                <div class="review-hub-card__stars">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Excelente. Você é bem informado e orientado. Passam segurança, confiança e tranquilidade nos procedimentos. Eu indico. Parabéns."</p>
+          </article>
+
+          <article class="review-hub-card" aria-hidden="true">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">I</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Izamara Montanari</p>
+                <div class="review-hub-card__stars">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Atendimento excelente, profissional maravilhosa."</p>
+          </article>
+
+          <article class="review-hub-card" aria-hidden="true">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">J</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Joabbe Steffan</p>
+                <div class="review-hub-card__stars">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"Profissional fantástica e tratamento de altíssimo nível!"</p>
+          </article>
+
+          <article class="review-hub-card" aria-hidden="true">
+            <div class="review-hub-card__top">
+              <div class="review-hub-card__avatar">M</div>
+              <div class="review-hub-card__author-info">
+                <p class="review-hub-card__author">Marcello Monteiro van Cleef</p>
+                <div class="review-hub-card__stars">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+              </div>
+            </div>
+            <p class="review-hub-card__text">"A clínica é maravilhosa, muito organizada e limpa. Fui atendido em uma situação de urgência e recebi todo o cuidado necessário com muita agilidade e atenção. As recepcionistas também merecem destaque: muito educadas, prestativas e acolhedoras desde o primeiro contato."</p>
+          </article>
+
+        </div>
+      </div>
+
+      <a href="https://g.page/r/CSU_BwaqazslEBM"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="reviews-all-link"
+         data-track="clique_avaliacao"
+         data-track-local="todas_avaliacoes">
+        <span>Ver todas as avaliações no Google</span>
+        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+      </a>
+    </section>
+
+    <!-- 6. ITEM 9: Nova Seção — Vídeos de Depoimento de Pacientes (Reels 9:16) -->
+    <section class="testimonials-video-section" aria-label="Depoimentos em Vídeo de Pacientes">
+      <h2 class="testimonials-video-title">Pacientes recomendando a clínica</h2>
+
+      <div class="testimonials-video-grid">
+        <!-- Vídeo Depoimento 1 -->
+        <div class="testimonial-video-card">
+          <video class="testimonial-video-player"
+                 playsinline
+                 muted
+                 loop
+                 preload="metadata"
+                 src="assets/videos%20de%20depoimento%20(1).mp4"
+                 data-video-name="depoimento_paciente_1"
+                 aria-label="Vídeo de depoimento de paciente">
+          </video>
+          <button class="testimonial-audio-btn" type="button" aria-label="Ativar som do depoimento">
+            <svg class="audio-icon--muted" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            <svg class="audio-icon--unmuted" style="display:none;" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            <span class="audio-btn-label">Tocar com som</span>
+          </button>
+        </div>
+
+        <!-- Vídeo Depoimento 2 -->
+        <div class="testimonial-video-card">
+          <video class="testimonial-video-player"
+                 playsinline
+                 muted
+                 loop
+                 preload="metadata"
+                 src="assets/videos%20de%20depoimento%20(2).mp4"
+                 data-video-name="depoimento_paciente_2"
+                 aria-label="Vídeo de depoimento de paciente">
+          </video>
+          <button class="testimonial-audio-btn" type="button" aria-label="Ativar som do depoimento">
+            <svg class="audio-icon--muted" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            <svg class="audio-icon--unmuted" style="display:none;" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            <span class="audio-btn-label">Tocar com som</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Compliance Footer -->
     <footer class="hub-footer">
-      Clínica Pollyany Policarpo Odontologia · CRO-SP 36541 / 98296<br>
-      <em>Ambiente de homologação — imagens e vídeos demonstrativos.</em>
+      <p class="hub-footer__clinic-name">Clínica Pollyany Policarpo Odontologia</p>
+      <p class="hub-footer__address">
+        Rua José Estanislau de Oliveira, 926 — Centro, São Pedro/SP, CEP 13520-023
+      </p>
+      <p class="hub-footer__cros">
+        CRO-SP 36541 (clínica) · CRO-SP 98296 (Dra. Pollyany Policarpo, responsável técnica)
+      </p>
     </footer>
+
   </main>
+
+  <!-- 8. LGPD Cookie Consent Toast -->
+  <aside id="lgpd-banner" class="lgpd-banner" role="dialog" aria-label="Aviso de Privacidade e Cookies">
+    <p class="lgpd-banner__text">
+      Utilizamos cookies para medição de audiência e aprimoramento contínuo dos nossos serviços, respeitando sua privacidade conforme a LGPD.
+    </p>
+    <div class="lgpd-banner__buttons">
+      <button id="lgpd-btn-reject" class="btn-lgpd btn-lgpd--reject">Recusar</button>
+      <button id="lgpd-btn-accept" class="btn-lgpd btn-lgpd--accept">Aceitar</button>
+    </div>
+  </aside>
+
 </body>
+
 </html>
