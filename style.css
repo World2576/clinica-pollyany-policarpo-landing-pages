@@ -550,70 +550,71 @@ body::before {
   }
 }
 
-/* ---------- ITEM 1: Cards dos Doutores (Foto Inteira + Textos Grandes + Badge Clique Aqui) ---------- */
+/* ---------- ITEM 1: Cards dos Doutores (Layout Alternado em Z idêntico ao Mockup do Usuário) ---------- */
 .hub-card--doctor {
   width: 100%;
-  min-height: 124px;
+  min-height: 150px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  padding: 0 0.85rem 0 0; /* sem padding inferior para ancorar foto no fundo */
+  padding: 0;
   background: linear-gradient(135deg, rgba(61, 42, 77, 0.9) 0%, rgba(42, 27, 53, 0.98) 100%);
   border: 1px solid var(--gold-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   color: var(--white);
   text-decoration: none;
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   transition: transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease-out), border-color 0.28s var(--ease-out);
   -webkit-tap-highlight-color: transparent;
 }
 
 .hub-card--doctor:hover {
   transform: translateY(-3px);
-  border-color: rgba(220, 195, 151, 0.7);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.48), 0 0 18px rgba(220, 195, 151, 0.22);
+  border-color: rgba(220, 195, 151, 0.75);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.48), 0 0 18px rgba(220, 195, 151, 0.22);
 }
 
 .hub-card--doctor:active {
   transform: scale(0.985);
 }
 
-.hub-card__doctor-body {
-  display: flex;
-  align-items: flex-end;
-  flex: 1;
-  height: 100%;
-  min-height: 124px;
-}
-
-/* Container da foto ancorada na borda inferior do botão */
+/* Container da foto ancorada na borda inferior */
 .hub-card__doctor-photo-wrap {
-  width: 110px;
-  height: 124px;
+  width: 140px;
+  height: 150px;
   flex-shrink: 0;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  margin-left: 0.35rem;
-  margin-right: 1.15rem;
   overflow: visible;
   pointer-events: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hub-card--doctor:not(.hub-card--doctor-reverse) .hub-card__doctor-photo-wrap {
+  margin-left: 0.5rem;
+}
+
+.hub-card--doctor.hub-card--doctor-reverse .hub-card__doctor-photo-wrap {
+  margin-right: 0.5rem;
 }
 
 .hub-card__doctor-img {
-  width: auto;
-  height: 124px;
-  max-width: 110px;
+  width: 100%;
+  height: 150px;
+  max-width: 140px;
   object-fit: contain;
   object-position: bottom center;
   display: block;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
 }
 
+/* Informações de texto */
 .hub-card__doctor-info {
   display: flex;
   flex-direction: column;
@@ -621,25 +622,36 @@ body::before {
   align-items: flex-start;
   flex: 1;
   text-align: left;
-  padding: 0.85rem 0.5rem 0.85rem 0;
-  height: 100%;
+  padding: 1.15rem 1.25rem;
+  z-index: 2;
+}
+
+.hub-card--doctor:not(.hub-card--doctor-reverse) .hub-card__doctor-info {
+  padding-left: 0.75rem;
+  padding-right: 1.25rem;
+}
+
+.hub-card--doctor.hub-card--doctor-reverse .hub-card__doctor-info {
+  padding-left: 1.35rem;
+  padding-right: 0.75rem;
 }
 
 .hub-card__doctor-info .hub-card__title {
-  font-size: 1.35rem;
-  font-weight: 700;
+  font-size: 1.55rem;
+  font-weight: 800;
   color: var(--white);
-  line-height: 1.2;
-  letter-spacing: -0.015em;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
   display: block;
 }
 
 .hub-card__doctor-info .hub-card__sub {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 500;
   color: var(--gold-light);
-  line-height: 1.3;
-  margin-top: 5px;
+  line-height: 1.25;
+  margin-top: 6px;
+  margin-bottom: 10px;
   opacity: 0.95;
   display: block;
 }
@@ -650,24 +662,22 @@ body::before {
   align-items: center;
   gap: 3px;
   font-size: 0.68rem;
-  font-weight: 600;
-  color: var(--gold);
-  background: rgba(220, 195, 151, 0.12);
-  border: 1px solid rgba(220, 195, 151, 0.28);
+  font-weight: 700;
+  color: var(--white);
+  background: rgba(26, 16, 32, 0.65);
+  border: 1px solid rgba(220, 195, 151, 0.35);
   border-radius: var(--radius-full);
-  padding: 0.25rem 0.65rem;
+  padding: 0.28rem 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-right: 0.85rem;
-  flex-shrink: 0;
+  letter-spacing: 0.05em;
   transition: all 0.22s var(--ease-out);
   white-space: nowrap;
 }
 
 .btn-click-hint svg {
-  width: 12px;
-  height: 12px;
-  fill: currentColor;
+  width: 11px;
+  height: 11px;
+  fill: var(--gold);
   transition: transform 0.22s var(--ease-out);
 }
 
@@ -682,6 +692,7 @@ body::before {
 .hub-card--doctor:hover .btn-click-hint svg,
 .hub-card--proc:hover .btn-click-hint svg {
   transform: translateX(2px);
+  fill: var(--white);
 }
 
 /* ---------- ITEM 4: Cards de Procedimento com Ícones 3D Soltos e Aumentados (Sem Moldura) ---------- */
