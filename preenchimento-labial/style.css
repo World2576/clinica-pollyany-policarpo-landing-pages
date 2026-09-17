@@ -1020,12 +1020,40 @@ body.has-fullscreen-video {
 }
 
 .before-after-pair {
+  position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(220, 195, 151, 0.18);
   background: var(--purple-deep);
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.before-after-pair:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  border-color: rgba(220, 195, 151, 0.4);
+}
+
+.before-after-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(26, 16, 32, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--gold);
+  border: 1px solid rgba(220, 195, 151, 0.35);
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
 }
 
 .before-after-pair img {

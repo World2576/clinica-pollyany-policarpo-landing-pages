@@ -309,22 +309,105 @@
         </div>
       </div>
 
-      <!-- Before / After -->
-      <h3 class="before-after-title reveal">Resultados reais</h3>
-      <div class="before-after-grid">
-        <div class="before-after-pair reveal" data-delay="1">
-          <img src="assets/antes-depois-1.jpg" alt="Resultado de implante dentário — antes e depois" width="600"
-            height="450" loading="lazy">
+      <!-- Carrossel de Clientes com a Dra. Pollyany -->
+      <div class="client-carousel-section reveal">
+        <h3 class="client-carousel-title">Sorrisos que transformamos</h3>
+        <p class="client-carousel-subtitle">A alegria dos nossos pacientes ao lado da Dra.&nbsp;Pollyany</p>
+        
+        <div class="client-carousel" id="clientCarousel" aria-roledescription="carousel">
+          <div class="client-carousel__track">
+            <div class="client-carousel__slide active">
+              <img src="assets/cliente-implante-1.jpg" alt="Paciente de Implante Dentário com a Dra. Pollyany Policarpo" width="500" height="660" loading="lazy">
+            </div>
+            <div class="client-carousel__slide">
+              <img src="assets/cliente-implante-2.jpg" alt="Paciente de Implante Dentário com a Dra. Pollyany Policarpo" width="500" height="660" loading="lazy">
+            </div>
+            <div class="client-carousel__slide">
+              <img src="assets/cliente-implante-3.jpg" alt="Pacientes de Implante Dentário com a Dra. Pollyany Policarpo" width="500" height="660" loading="lazy">
+            </div>
+          </div>
+          
+          <button class="client-carousel__arrow client-carousel__arrow--prev" id="carouselPrev" aria-label="Foto anterior">
+            <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+          </button>
+          <button class="client-carousel__arrow client-carousel__arrow--next" id="carouselNext" aria-label="Próxima foto">
+            <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+          </button>
+          
+          <div class="client-carousel__dots" id="carouselDots">
+            <button class="carousel-dot active" data-index="0" aria-label="Ir para foto 1"></button>
+            <button class="carousel-dot" data-index="1" aria-label="Ir para foto 2"></button>
+            <button class="carousel-dot" data-index="2" aria-label="Ir para foto 3"></button>
+          </div>
         </div>
-        <div class="before-after-pair reveal" data-delay="2">
-          <img src="assets/antes-depois-2.jpg" alt="Resultado de implante dentário — antes e depois" width="600"
-            height="450" loading="lazy">
+
+        <!-- Frase inspiradora abaixo do carrossel -->
+        <div class="client-carousel__quote-wrap">
+          <blockquote class="client-carousel__quote">
+            "Sorrir com liberdade não é apenas estética: é resgatar a autoestima, o prazer de mastigar sem dor e a felicidade de se sentir completo."
+          </blockquote>
+          <span class="client-carousel__quote-author">— Dra. Pollyany Policarpo & Equipe</span>
         </div>
       </div>
-      <p class="before-after-caption reveal" data-delay="3">
-        Resultado real de paciente da clínica, imagem usada com autorização.
-        Resultados podem variar de acordo com cada caso.
-      </p>
+
+      <!-- Before / After (3 Casos com seletor interativo) -->
+      <div class="before-after-section reveal">
+        <h3 class="before-after-title">Resultados reais</h3>
+        
+        <!-- Case Selector Tabs -->
+        <div class="case-tabs" id="caseTabs" role="tablist">
+          <button class="case-tab active" data-case="1" role="tab" aria-selected="true">Caso 1</button>
+          <button class="case-tab" data-case="2" role="tab" aria-selected="false">Caso 2</button>
+          <button class="case-tab" data-case="3" role="tab" aria-selected="false">Caso 3</button>
+        </div>
+
+        <!-- Caso 1 -->
+        <div class="case-panel active" id="case-panel-1">
+          <div class="before-after-grid">
+            <div class="before-after-pair">
+              <span class="before-after-badge">Antes</span>
+              <img src="assets/antes-1.jpg" alt="Caso 1 — Implante Dentário Antes" width="600" height="600" loading="lazy">
+            </div>
+            <div class="before-after-pair">
+              <span class="before-after-badge">Depois</span>
+              <img src="assets/depois-1.jpg" alt="Caso 1 — Implante Dentário Depois" width="600" height="600" loading="lazy">
+            </div>
+          </div>
+        </div>
+
+        <!-- Caso 2 -->
+        <div class="case-panel" id="case-panel-2">
+          <div class="before-after-grid">
+            <div class="before-after-pair">
+              <span class="before-after-badge">Antes</span>
+              <img src="assets/antes-2.jpg" alt="Caso 2 — Implante Dentário Antes" width="600" height="600" loading="lazy">
+            </div>
+            <div class="before-after-pair">
+              <span class="before-after-badge">Depois</span>
+              <img src="assets/depois-2.jpg" alt="Caso 2 — Implante Dentário Depois" width="600" height="600" loading="lazy">
+            </div>
+          </div>
+        </div>
+
+        <!-- Caso 3 -->
+        <div class="case-panel" id="case-panel-3">
+          <div class="before-after-grid">
+            <div class="before-after-pair">
+              <span class="before-after-badge">Antes</span>
+              <img src="assets/antes-3.jpg" alt="Caso 3 — Implante Dentário Antes" width="600" height="600" loading="lazy">
+            </div>
+            <div class="before-after-pair">
+              <span class="before-after-badge">Depois</span>
+              <img src="assets/depois-3.jpg" alt="Caso 3 — Implante Dentário Depois" width="600" height="600" loading="lazy">
+            </div>
+          </div>
+        </div>
+
+        <p class="before-after-caption">
+          Resultados reais de pacientes da clínica, imagens usadas com autorização.
+          Resultados podem variar de acordo com cada caso.
+        </p>
+      </div>
     </div>
   </section>
 

@@ -459,12 +459,94 @@
     }
   });
 
-  // Block context menu on video stage
-  const stage = document.querySelector('.vsl-stage');
-  if (stage) {
-    stage.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
+  // ── Client Carousel (Auto-rotation every 3.5s + Controls) ──
+  const slides = document.querySelectorAll('.client-carousel__slide');
+  const dots = document.querySelectorAll('.carousel-dot');
+  const prevBtn = document.getElementById('carouselPrev');
+  const nextBtn = document.getElementById('carouselNext');
+  let currentSlide = 0;
+  let carouselTimer = null;
+
+  function showSlide(index) {
+    if (!slides.length) return;
+    currentSlide = (index + slides.length) % slides.length;
+    slides.forEach((slide, idx) => {
+      slide.classList.toggle('active', idx === currentSlide);
+    });
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentSlide);
     });
   }
+
+  function nextSlide() {
+    showSlide(currentSlide + 1);
+  }
+
+  function prevSlide() {
+    showSlide(currentSlide - 1);
+  }
+
+  function startCarousel() {
+    stopCarousel();
+    carouselTimer = setInterval(nextSlide, 3500);
+  }
+
+  function stopCarousel() {
+    if (carouselTimer) {
+      clearInterval(carouselTimer);
+      carouselTimer = null;
+    }
+  }
+
+  if (slides.length > 0) {
+    startCarousel();
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        nextSlide();
+        startCarousel();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        prevSlide();
+        startCarousel();
+      });
+    }
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        showSlide(idx);
+        startCarousel();
+      });
+    });
+
+    const carouselEl = document.getElementById('clientCarousel');
+    if (carouselEl) {
+      carouselEl.addEventListener('mouseenter', stopCarousel);
+      carouselEl.addEventListener('mouseleave', startCarousel);
+      carouselEl.addEventListener('touchstart', stopCarousel, { passive: true });
+      carouselEl.addEventListener('touchend', startCarousel, { passive: true });
+    }
+  }
+
+  // ── Before / After Case Tabs ──
+  const caseTabs = document.querySelectorAll('.case-tab');
+  const casePanels = document.querySelectorAll('.case-panel');
+
+  caseTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetCase = tab.getAttribute('data-case');
+      caseTabs.forEach(t => {
+        const isActive = t === tab;
+        t.classList.toggle('active', isActive);
+        t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      casePanels.forEach(panel => {
+        panel.classList.toggle('active', panel.id === `case-panel-${targetCase}`);
+      });
+    });
+  });
 
 })();
