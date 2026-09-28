@@ -1,0 +1,4 @@
+# Ignore raw uncompressed video files > 100MB (GitHub limit)
+*IMPLANTE DENTARIO.mp4
+*PREENCHIMENTO LABIAL.mp4
+node_modules/
