@@ -1,6 +1,6 @@
 /* ============================================================
    Clínica Pollyany Policarpo — VSL Landing Page (Implante Dentário)
-   Player Travado 16:9 + Sem Pausa + Barra Côncava + Mute + Fullscreen + Carrossel
+   Player Travado no 1º play + Desbloqueio de Controles ao Finalizar (Sem Loop)
    ============================================================ */
 
 (function () {
@@ -11,9 +11,13 @@
   const video         = document.getElementById('vsl-video');
   const overlay       = document.getElementById('vsl-overlay');
   const ambientEl     = document.querySelector('.vsl-ambient');
+  const barWrap       = document.querySelector('.vsl-controls__bar-wrap');
   const barFill       = document.querySelector('.vsl-controls__bar-fill');
   const hintEl        = document.querySelector('.vsl-controls__hint');
   const controlsEl    = document.querySelector('.vsl-controls');
+  const playPauseBtn  = document.getElementById('btn-play-pause');
+  const playPauseSvg  = document.getElementById('play-pause-icon');
+  const rewindBtn     = document.getElementById('btn-rewind');
   const muteBtn       = document.getElementById('btn-mute');
   const muteSvg       = document.getElementById('mute-icon');
   const fullscreenBtn = document.getElementById('btn-fullscreen');
@@ -88,20 +92,30 @@
     }
   }
 
-  // ── Progress Bar (Curva Côncava: Começa rápido e vai desacelerando) ──
+  // ── Progress Bar ──
   function updateProgress(realProgress) {
-    const displayed = Math.pow(Math.min(realProgress, 1), 0.4);
     if (barFill) {
-      barFill.style.width = `${displayed * 100}%`;
+      if (!videoEnded) {
+        // Modo travado: curva côncava (começa rápido e desacelera)
+        const displayed = Math.pow(Math.min(realProgress, 1), 0.4);
+        barFill.style.width = `${displayed * 100}%`;
+      } else {
+        // Modo livre: posição linear real
+        barFill.style.width = `${Math.min(100, Math.max(0, realProgress * 100))}%`;
+      }
     }
 
     if (hintEl) {
-      if (realProgress >= 0.9) {
-        hintEl.textContent = 'Só mais um pouco...';
-        hintEl.classList.add('show');
-      } else if (realProgress >= 0.8) {
-        hintEl.textContent = 'Você está quase lá...';
-        hintEl.classList.add('show');
+      if (!videoEnded) {
+        if (realProgress >= 0.9) {
+          hintEl.textContent = 'Só mais um pouco...';
+          hintEl.classList.add('show');
+        } else if (realProgress >= 0.8) {
+          hintEl.textContent = 'Você está quase lá...';
+          hintEl.classList.add('show');
+        } else {
+          hintEl.classList.remove('show');
+        }
       } else {
         hintEl.classList.remove('show');
       }
@@ -117,7 +131,6 @@
       }
     });
 
-    // Desbloqueia seções a partir de 50% ou 25s
     if (realProgress >= 0.5) {
       unlockSections();
     }
@@ -131,10 +144,11 @@
 
   // ── Video Events ──
   function onVideoEnded() {
-    if (videoEnded) return;
     videoEnded = true;
+    if (video) video.pause(); // Pára e NÃO repete o vídeo
     stopAmbient();
     unlockSections();
+    enableUnlockedMode();
 
     if (isFullscreenActive()) {
       toggleFullscreen();
@@ -145,7 +159,55 @@
       if (nextSection) {
         nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    }, 300);
+    }, 400);
+  }
+
+  // ── Libera Controles Interativos Após o Vídeo Concluir ──
+  function enableUnlockedMode() {
+    if (controlsEl) {
+      controlsEl.classList.add('is-unlocked');
+      controlsEl.classList.add('visible');
+    }
+    updatePlayPauseIcon();
+  }
+
+  function updatePlayPauseIcon() {
+    if (!playPauseSvg || !video) return;
+    if (video.ended || video.currentTime >= (video.duration - 0.5)) {
+      // Ícone de Replay (Voltar ao início)
+      playPauseSvg.innerHTML = '<path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>';
+      if (playPauseBtn) playPauseBtn.setAttribute('aria-label', 'Reassistir vídeo');
+    } else if (video.paused) {
+      // Ícone de Play
+      playPauseSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
+      if (playPauseBtn) playPauseBtn.setAttribute('aria-label', 'Reproduzir vídeo');
+    } else {
+      // Ícone de Pause
+      playPauseSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+      if (playPauseBtn) playPauseBtn.setAttribute('aria-label', 'Pausar vídeo');
+    }
+  }
+
+  function togglePlayPause() {
+    if (!video) return;
+    if (!videoEnded) return; // Só permite pausar/despausar depois do vídeo terminar a 1ª vez
+
+    if (video.ended || video.currentTime >= (video.duration - 0.5)) {
+      video.currentTime = 0;
+      video.play().then(() => {
+        startAmbient();
+        updatePlayPauseIcon();
+      }).catch(() => {});
+    } else if (video.paused) {
+      video.play().then(() => {
+        startAmbient();
+        updatePlayPauseIcon();
+      }).catch(() => {});
+    } else {
+      video.pause();
+      stopAmbient();
+      updatePlayPauseIcon();
+    }
   }
 
   // ── Fullscreen Support (Native + Pseudo-fullscreen iOS) ──
@@ -233,7 +295,7 @@
   document.addEventListener('mozfullscreenchange', updateFullscreenIcon);
   document.addEventListener('MSFullscreenChange', updateFullscreenIcon);
 
-  // ── Play Overlay Click ──
+  // ── Play Overlay Click (Inicia 1ª reprodução) ──
   if (overlay) {
     overlay.addEventListener('click', () => {
       overlay.classList.add('hidden');
@@ -243,7 +305,6 @@
       if (video) {
         video.muted = false;
         video.play().catch(() => {
-          // Autoplay fallback com áudio mutado se o navegador bloquear som direto
           video.muted = true;
           video.play();
           updateMuteIcon();
@@ -253,29 +314,87 @@
     });
   }
 
-  // ── Impede Pausar e Acelerar o Vídeo ──
+  // ── Botão Play/Pause (Ativo após o vídeo finalizar) ──
+  if (playPauseBtn) {
+    playPauseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePlayPause();
+    });
+  }
+
+  // ── Botão Voltar 10s (Ativo após o vídeo finalizar) ──
+  if (rewindBtn) {
+    rewindBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!video) return;
+      video.currentTime = Math.max(0, video.currentTime - 10);
+      if (video.duration) {
+        updateProgress(video.currentTime / video.duration);
+      }
+      if (video.paused && !video.ended) {
+        video.play().then(() => {
+          startAmbient();
+          updatePlayPauseIcon();
+        }).catch(() => {});
+      } else {
+        updatePlayPauseIcon();
+      }
+    });
+  }
+
+  // ── Clique na Barra de Progresso (Scrubbing liberado após o vídeo finalizar) ──
+  if (barWrap) {
+    barWrap.addEventListener('click', (e) => {
+      if (!videoEnded || !video || !video.duration) return;
+      e.stopPropagation();
+      const rect = barWrap.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(1, clickX / rect.width));
+      video.currentTime = pct * video.duration;
+      updateProgress(pct);
+      if (video.paused) {
+        video.play().then(() => {
+          startAmbient();
+          updatePlayPauseIcon();
+        }).catch(() => {});
+      }
+    });
+  }
+
+  // ── Listeners do Vídeo ──
   if (video) {
-    // Se o navegador tentar pausar depois de iniciado, retoma imediatamente
+    // Enquanto o vídeo NÃO terminou, se o navegador tentar pausar, força retomar
     video.addEventListener('pause', () => {
       if (videoStarted && !videoEnded) {
         video.play().catch(() => {});
+      } else if (videoEnded) {
+        stopAmbient();
+        updatePlayPauseIcon();
       }
     });
 
-    // Impede alteração de velocidade de reprodução
+    video.addEventListener('play', () => {
+      if (videoStarted) {
+        startAmbient();
+        updatePlayPauseIcon();
+      }
+    });
+
+    // Impede alteração de velocidade de reprodução durante a 1ª visualização
     video.addEventListener('ratechange', () => {
-      if (video.playbackRate !== 1.0) {
+      if (!videoEnded && video.playbackRate !== 1.0) {
         video.playbackRate = 1.0;
       }
     });
 
-    // Atualização contínua do progresso com curva côncava
+    // Atualização de progresso
     video.addEventListener('timeupdate', () => {
       if (video.duration && video.duration > 0) {
         updateProgress(video.currentTime / video.duration);
       }
     });
 
+    // Quando o vídeo termina
     video.addEventListener('ended', onVideoEnded);
   }
 
@@ -307,20 +426,36 @@
     });
   }
 
-  // ── Bloqueio de Teclas de Atalho (Sem Pausar / Sem Avançar) ──
+  // ── Bloqueio e Liberação de Teclas de Atalho ──
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isFullscreenActive()) {
       toggleFullscreen();
       return;
     }
-    // Bloqueia teclas que pausariam ou acelerariam/avançariam o vídeo
-    const blocked = [' ', 'Space', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'k', 'K', 'j', 'J', 'l', 'L'];
-    if (blocked.includes(e.key) || blocked.includes(e.code)) {
-      if (videoStarted) {
+
+    if (!videoEnded) {
+      // Enquanto não finalizou: bloqueia pausar e avançar
+      const blocked = [' ', 'Space', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'k', 'K', 'j', 'J', 'l', 'L'];
+      if (blocked.includes(e.key) || blocked.includes(e.code)) {
+        if (videoStarted) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }
+    } else {
+      // Depois de finalizado: permite espaço/K para pausar e setas para voltar/avançar
+      if (e.key === ' ' || e.code === 'Space' || e.key === 'k' || e.key === 'K') {
         e.preventDefault();
-        e.stopPropagation();
+        togglePlayPause();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (video) video.currentTime = Math.max(0, video.currentTime - 5);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        if (video && video.duration) video.currentTime = Math.min(video.duration, video.currentTime + 5);
       }
     }
+
     if (e.key === 'm' || e.key === 'M') {
       if (video) {
         video.muted = !video.muted;
@@ -332,10 +467,12 @@
     }
   });
 
-  // Bloqueio de menu de contexto no vídeo
+  // Bloqueio de menu de contexto enquanto travado
   if (videoWrap) {
     videoWrap.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
+      if (!videoEnded) {
+        e.preventDefault();
+      }
     });
   }
 

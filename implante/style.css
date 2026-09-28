@@ -513,6 +513,34 @@ button {
   pointer-events: none;
 }
 
+/* ---------- Unlocked Mode (After Video Ends) ---------- */
+.vsl-controls.is-unlocked .vsl-controls__btn--unlocked {
+  display: flex !important;
+  animation: fadeInBtn 0.35s var(--ease-spring) forwards;
+}
+
+.vsl-controls.is-unlocked .vsl-controls__bar-wrap {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  height: 8px !important;
+  transition: height 0.2s ease;
+}
+
+.vsl-controls.is-unlocked .vsl-controls__bar-wrap:hover {
+  height: 10px !important;
+}
+
+@keyframes fadeInBtn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* ---------- CRO Info Below Video ---------- */
 .vsl-cro-info {
   display: flex;
