@@ -55,17 +55,22 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_events_visitor ON events(visitor_id);
 `);
 
+// Migração segura para adicionar coluna button_type se não existir
+try {
+  db.exec(`ALTER TABLE events ADD COLUMN button_type TEXT;`);
+} catch (e) {}
+
 // Prepara declaração de inserção
 const insertStmt = db.prepare(`
   INSERT INTO events (
     visitor_id, session_id, event_name, page_path, page_category,
-    target_text, target_id, target_url, target_local,
+    target_text, target_id, target_url, target_local, button_type,
     duration_seconds, video_milestone, video_name,
     device, referrer, utm_source, utm_medium, utm_campaign,
     created_at, created_date
   ) VALUES (
     ?, ?, ?, ?, ?,
-    ?, ?, ?, ?,
+    ?, ?, ?, ?, ?,
     ?, ?, ?,
     ?, ?, ?, ?, ?,
     ?, ?
@@ -161,6 +166,7 @@ app.post('/api/collect', (req, res) => {
     const targetId = (ev.target_id || '').slice(0, 100);
     const targetUrl = (ev.target_url || '').slice(0, 500);
     const targetLocal = (ev.target_local || '').slice(0, 100);
+    const buttonType = (ev.button_type || '').slice(0, 50);
     const durationSeconds = typeof ev.duration_seconds === 'number' ? ev.duration_seconds : 0;
     const videoMilestone = typeof ev.video_milestone === 'number' ? ev.video_milestone : 0;
     const videoName = (ev.video_name || '').slice(0, 100);
@@ -175,7 +181,7 @@ app.post('/api/collect', (req, res) => {
     try {
       insertStmt.run(
         visitorId, sessionId, eventName, pagePath, pageCategory,
-        targetText, targetId, targetUrl, targetLocal,
+        targetText, targetId, targetUrl, targetLocal, buttonType,
         durationSeconds, videoMilestone, videoName,
         device, referrer, utmSource, utmMedium, utmCampaign,
         createdAt, createdDate
@@ -248,6 +254,17 @@ app.get('/api/stats/overview', authMiddleware, (req, res) => {
   `);
   const general = totalVisitorsStmt.get(...params) || { visitors: 0, pageviews: 0, clicks: 0 };
 
+  // Contagem por Canais Específicos
+  const channelsStmt = db.prepare(`
+    SELECT 
+      COUNT(CASE WHEN event_name = 'clique_whatsapp' OR target_url LIKE '%wa.me%' OR target_url LIKE '%whatsapp%' OR button_type = 'WhatsApp' THEN 1 END) AS whatsapp,
+      COUNT(CASE WHEN event_name = 'clique_instagram' OR target_url LIKE '%instagram.com%' OR button_type = 'Instagram' THEN 1 END) AS instagram,
+      COUNT(CASE WHEN event_name IN ('clique_google_negocio', 'clique_avaliacao', 'clique_localizacao') OR target_url LIKE '%g.page%' OR target_url LIKE '%share.google%' OR target_url LIKE '%google.com/maps%' OR button_type = 'Google Meu Negócio' THEN 1 END) AS google,
+      COUNT(CASE WHEN event_name = 'clique_agendamento' OR target_url LIKE '%agenda.link%' OR button_type = 'Agendamento Online' THEN 1 END) AS agendamento
+    FROM events ${where ? where + " AND event_name LIKE 'clique_%'" : "WHERE event_name LIKE 'clique_%'"}
+  `);
+  const channels = channelsStmt.get(...params) || { whatsapp: 0, instagram: 0, google: 0, agendamento: 0 };
+
   // Tempo médio na página (por sessão)
   const timeStmt = db.prepare(`
     SELECT AVG(max_duration) as avg_duration FROM (
@@ -281,6 +298,10 @@ app.get('/api/stats/overview', authMiddleware, (req, res) => {
     visitors,
     pageviews,
     clicks,
+    whatsappClicks: channels.whatsapp || 0,
+    instagramClicks: channels.instagram || 0,
+    googleClicks: channels.google || 0,
+    agendamentoClicks: channels.agendamento || 0,
     avgDuration,
     videoPlays,
     videoCompletions,
@@ -331,27 +352,44 @@ app.get('/api/stats/pages', authMiddleware, (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────
-// ENDPOINT 5: ANÁLISE DE BOTÕES (/api/stats/buttons)
+// ENDPOINT 5: ANÁLISE DE BOTÕES COM CANAIS (/api/stats/buttons)
 // ─────────────────────────────────────────────────────────────
 app.get('/api/stats/buttons', authMiddleware, (req, res) => {
   const { where, params } = buildFilterClause(req);
   const clickWhere = where ? `${where} AND event_name LIKE 'clique_%'` : "WHERE event_name LIKE 'clique_%'";
 
-  // Ranking geral de botões
+  // Ranking com classificação de canal
   const rankingStmt = db.prepare(`
     SELECT 
       target_text,
       target_id,
       target_local,
       page_category,
+      CASE 
+        WHEN button_type IS NOT NULL AND button_type != '' AND button_type != 'outro' THEN button_type
+        WHEN event_name = 'clique_whatsapp' OR target_url LIKE '%wa.me%' OR target_url LIKE '%whatsapp%' THEN 'WhatsApp'
+        WHEN event_name = 'clique_instagram' OR target_url LIKE '%instagram.com%' OR target_local LIKE '%instagram%' THEN 'Instagram'
+        WHEN event_name IN ('clique_google_negocio', 'clique_avaliacao', 'clique_localizacao') OR target_url LIKE '%g.page%' OR target_url LIKE '%share.google%' OR target_url LIKE '%google.com/maps%' THEN 'Google Meu Negócio'
+        WHEN event_name = 'clique_agendamento' OR target_url LIKE '%agenda.link%' THEN 'Agendamento Online'
+        WHEN event_name = 'clique_facebook' OR target_url LIKE '%facebook.com%' THEN 'Facebook'
+        WHEN event_name = 'clique_doutor' OR target_url LIKE '%equipe/%' THEN 'Doutores'
+        WHEN event_name = 'clique_especialidade' OR target_url LIKE '%implante%' OR target_url LIKE '%preenchimento%' OR target_url LIKE '%alinhador%' THEN 'Especialidades'
+        ELSE 'Outro'
+      END AS channel,
       COUNT(*) as total_clicks,
       COUNT(DISTINCT visitor_id) as unique_clickers
     FROM events
     ${clickWhere}
-    GROUP BY target_text, target_id, target_local, page_category
+    GROUP BY target_text, target_id, target_local, page_category, channel
     ORDER BY total_clicks DESC
   `);
-  const buttons = rankingStmt.all(...params);
+  let buttons = rankingStmt.all(...params);
+
+  // Filtro opcional por canal (ex: whatsapp, instagram, google, agendamento)
+  const channelFilter = req.query.channel;
+  if (channelFilter && channelFilter !== 'todos') {
+    buttons = buttons.filter(b => b.channel.toLowerCase().includes(channelFilter.toLowerCase()));
+  }
 
   // Evolução diária por botão
   const dailyStmt = db.prepare(`
@@ -366,7 +404,21 @@ app.get('/api/stats/buttons', authMiddleware, (req, res) => {
   `);
   const dailyBreakdown = dailyStmt.all(...params);
 
+  // Resumo por canais
+  const summaryStmt = db.prepare(`
+    SELECT 
+      COUNT(CASE WHEN event_name = 'clique_whatsapp' OR target_url LIKE '%wa.me%' OR target_url LIKE '%whatsapp%' OR button_type = 'WhatsApp' THEN 1 END) AS whatsapp,
+      COUNT(CASE WHEN event_name = 'clique_instagram' OR target_url LIKE '%instagram.com%' OR button_type = 'Instagram' THEN 1 END) AS instagram,
+      COUNT(CASE WHEN event_name IN ('clique_google_negocio', 'clique_avaliacao', 'clique_localizacao') OR target_url LIKE '%g.page%' OR target_url LIKE '%share.google%' OR target_url LIKE '%google.com/maps%' OR button_type = 'Google Meu Negócio' THEN 1 END) AS google,
+      COUNT(CASE WHEN event_name = 'clique_agendamento' OR target_url LIKE '%agenda.link%' OR button_type = 'Agendamento Online' THEN 1 END) AS agendamento,
+      COUNT(*) as total
+    FROM events
+    ${clickWhere}
+  `);
+  const summary = summaryStmt.get(...params) || { whatsapp: 0, instagram: 0, google: 0, agendamento: 0, total: 0 };
+
   res.json({
+    summary,
     buttons,
     dailyBreakdown
   });

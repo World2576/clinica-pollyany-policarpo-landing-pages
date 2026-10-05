@@ -430,6 +430,168 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   GRADE DE CANAIS DE CONVERSÃO (WhatsApp, Google, Insta, Agenda)
+   ───────────────────────────────────────────────────────────── */
+.channel-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.channel-kpi-card {
+  background: var(--bg-card);
+  border: var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.5rem;
+  backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.channel-kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+.channel-card--whatsapp:hover {
+  border-color: rgba(34, 197, 94, 0.45);
+  box-shadow: 0 12px 28px rgba(34, 197, 94, 0.2);
+}
+
+.channel-card--google:hover {
+  border-color: rgba(59, 130, 246, 0.45);
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.2);
+}
+
+.channel-card--instagram:hover {
+  border-color: rgba(236, 72, 153, 0.45);
+  box-shadow: 0 12px 28px rgba(236, 72, 153, 0.2);
+}
+
+.channel-card--agenda:hover {
+  border-color: rgba(220, 195, 151, 0.45);
+  box-shadow: 0 12px 28px rgba(220, 195, 151, 0.2);
+}
+
+.channel-kpi__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.channel-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-whatsapp {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+.badge-google {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.badge-instagram {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+}
+
+.badge-agenda {
+  background: rgba(220, 195, 151, 0.15);
+  color: var(--gold-light);
+  border: 1px solid rgba(220, 195, 151, 0.35);
+}
+
+.channel-icon {
+  font-size: 1.25rem;
+}
+
+.channel-kpi__val {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #FFF;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.channel-card--whatsapp .channel-kpi__val { color: #4ade80; }
+.channel-card--google .channel-kpi__val { color: #60a5fa; }
+.channel-card--instagram .channel-kpi__val { color: #f472b6; }
+.channel-card--agenda .channel-kpi__val { color: var(--gold-light); }
+
+.channel-kpi__hint {
+  font-size: 0.8rem;
+  color: var(--text-sub);
+}
+
+/* Filtro de Canais nos Botões */
+.channel-filter-chips {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.channel-chip {
+  padding: 0.35rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.channel-chip:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.channel-chip.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.channel-chip.chip-whatsapp.active {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.channel-chip.chip-google.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.channel-chip.chip-instagram.active {
+  background: rgba(236, 72, 153, 0.2);
+  color: #f472b6;
+  border-color: rgba(236, 72, 153, 0.5);
+}
+
+.channel-chip.chip-agenda.active {
+  background: rgba(220, 195, 151, 0.2);
+  color: var(--gold-light);
+  border-color: var(--gold-primary);
+}
+
+/* ─────────────────────────────────────────────────────────────
    CARDS DE SEÇÃO E TABELAS
    ───────────────────────────────────────────────────────────── */
 .section-card {

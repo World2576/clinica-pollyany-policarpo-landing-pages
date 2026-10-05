@@ -12,7 +12,8 @@
     period: 'today',
     startDate: getTodayDateString(),
     endDate: getTodayDateString(),
-    page: 'todas'
+    page: 'todas',
+    channel: 'todos'
   };
 
   // Elementos do DOM
@@ -28,6 +29,17 @@
   const filterEnd = document.getElementById('filter-end');
   const btnApplyDates = document.getElementById('btn-apply-dates');
   const dateChips = document.querySelectorAll('.date-chip');
+  const channelChips = document.querySelectorAll('.channel-chip');
+
+  // Listeners dos chips de canais
+  channelChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      filters.channel = chip.dataset.channel;
+      channelChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      loadButtons();
+    });
+  });
 
   // ─────────────────────────────────────────────────────────────
   // 1. GESTÃO DE AUTENTICAÇÃO
@@ -178,6 +190,7 @@
     if (filters.startDate) params.set('startDate', filters.startDate);
     if (filters.endDate) params.set('endDate', filters.endDate);
     if (filters.page && filters.page !== 'todas') params.set('page', filters.page);
+    if (filters.channel && filters.channel !== 'todos') params.set('channel', filters.channel);
     return params.toString();
   }
 
@@ -213,13 +226,17 @@
   // ─────────────────────────────────────────────────────────────
   async function loadOverview() {
     const data = await apiFetch('/api/stats/overview');
-    document.getElementById('kpi-visitors').textContent = data.visitors.toLocaleString();
-    document.getElementById('kpi-views').textContent = data.pageviews.toLocaleString();
+    document.getElementById('kpi-visitors').textContent = (data.visitors || 0).toLocaleString();
+    document.getElementById('kpi-views').textContent = (data.pageviews || 0).toLocaleString();
     document.getElementById('kpi-time').textContent = formatSeconds(data.avgDuration);
-    document.getElementById('kpi-clicks').textContent = data.clicks.toLocaleString();
-    document.getElementById('kpi-ctr').textContent = `${data.ctrGlobal}%`;
-    document.getElementById('kpi-video-rate').textContent = `${data.videoCompletionRate}%`;
-    document.getElementById('kpi-video-completions').textContent = data.videoCompletions.toLocaleString();
+    document.getElementById('kpi-video-rate').textContent = `${data.videoCompletionRate || 0}%`;
+    document.getElementById('kpi-video-completions').textContent = (data.videoCompletions || 0).toLocaleString();
+
+    // Contadores dos Canais Específicos
+    document.getElementById('kpi-whatsapp').textContent = (data.whatsappClicks || 0).toLocaleString();
+    document.getElementById('kpi-google').textContent = (data.googleClicks || 0).toLocaleString();
+    document.getElementById('kpi-instagram').textContent = (data.instagramClicks || 0).toLocaleString();
+    document.getElementById('kpi-agendamento').textContent = (data.agendamentoClicks || 0).toLocaleString();
   }
 
   function formatSeconds(secs) {
@@ -258,7 +275,7 @@
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 6. RANKING DE BOTÕES MAIS E MENOS CLICADOS
+  // 6. RANKING DE BOTÕES COM CLASSIFICAÇÃO DE CANAL
   // ─────────────────────────────────────────────────────────────
   async function loadButtons() {
     const data = await apiFetch('/api/stats/buttons');
@@ -267,20 +284,18 @@
 
     const list = data.buttons || [];
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" class="table-empty">Nenhum clique registrado no período selecionado.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" class="table-empty">Nenhum clique registrado no período selecionado para este canal.</td></tr>';
       return;
     }
-
-    const maxClicks = list[0].total_clicks || 1;
 
     list.forEach((b, index) => {
       let badgeClass = 'badge-gray';
       let badgeText = 'Moderado';
 
-      if (index === 0) {
+      if (index === 0 && b.total_clicks > 0) {
         badgeClass = 'badge-gold';
         badgeText = '★ Mais Clicado';
-      } else if (index < 3) {
+      } else if (index < 3 && b.total_clicks > 1) {
         badgeClass = 'badge-green';
         badgeText = 'Alta Demanda';
       } else if (b.total_clicks <= 2) {
@@ -288,17 +303,27 @@
         badgeText = 'Menos Clicado';
       }
 
-      const label = b.target_text || b.target_id || 'Botão sem texto';
+      const label = b.target_text || b.target_id || 'Botão';
       const pageName = b.page_category === 'principal' ? 'Árvore Principal' :
                        b.page_category === 'implante' ? 'Implantes' :
-                       b.page_category === 'preenchimento' ? 'Preenchimento' : b.page_category;
+                       b.page_category === 'preenchimento' ? 'Preenchimento' :
+                       b.page_category === 'alinhador' ? 'Alinhadores' :
+                       b.page_category === 'equipe' ? 'Equipe' : b.page_category;
+
+      const channel = b.channel || 'Outro';
+      let badgeChannelClass = 'badge-gray';
+      if (channel === 'WhatsApp') badgeChannelClass = 'badge-whatsapp';
+      else if (channel === 'Google Meu Negócio') badgeChannelClass = 'badge-google';
+      else if (channel === 'Instagram') badgeChannelClass = 'badge-instagram';
+      else if (channel === 'Agendamento Online') badgeChannelClass = 'badge-agenda';
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>
           <div style="font-weight: 700; color: #FFF;">${label}</div>
-          <div style="font-size: 0.78rem; color: var(--text-muted);">${b.target_local || 'geral'}</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">${b.target_local || 'geral'} ${b.target_id ? `(#${b.target_id})` : ''}</div>
         </td>
+        <td><span class="channel-badge ${badgeChannelClass}">${channel}</span></td>
         <td>${pageName}</td>
         <td><strong>${b.total_clicks.toLocaleString()}</strong></td>
         <td>${b.unique_clickers.toLocaleString()}</td>

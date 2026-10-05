@@ -279,6 +279,7 @@ const TRACKING_CONFIG = {
       video_milestone: params.progresso ? parseInt(params.progresso, 10) : (eventName === 'video_completo' ? 100 : 0),
       video_name: params.video || '',
       device: getDeviceType(),
+      button_type: params.channel_type || '',
       referrer: document.referrer || '',
       utm_source: currentUtms.utm_source || '',
       utm_medium: currentUtms.utm_medium || '',
@@ -316,27 +317,65 @@ const TRACKING_CONFIG = {
   } catch (e) {}
 
   // ─────────────────────────────────────────────────────────────
-  // 4. DELEGAÇÃO DE EVENTOS DE CLIQUE (data-track)
+  // 4. DELEGAÇÃO UNIVERSAL DE EVENTOS DE CLIQUE EM BOTÕES E LINKS
   // ─────────────────────────────────────────────────────────────
   document.addEventListener('click', function (e) {
-    const targetElement = e.target.closest('[data-track]');
-    if (!targetElement) return;
+    const clickable = e.target.closest('a, button, [data-track], .hub-btn, .cta-whatsapp, .address-block__link');
+    if (!clickable) return;
 
-    const eventName = targetElement.getAttribute('data-track');
-    const local = targetElement.getAttribute('data-track-local') || 'geral';
-    const text = (targetElement.innerText || targetElement.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80);
-    const href = targetElement.getAttribute('href') || '';
-    const elementId = targetElement.id || '';
+    const href = clickable.getAttribute('href') || clickable.dataset.href || '';
+    const hrefLower = href.toLowerCase();
+    const elementId = clickable.id || '';
+    let eventName = clickable.getAttribute('data-track');
+    let local = clickable.getAttribute('data-track-local') || '';
+    let text = (clickable.innerText || clickable.textContent || clickable.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ').slice(0, 90);
+
+    // Identificação Inteligente do Canal / Tipo do Botão
+    let channelType = 'outro';
+
+    if (hrefLower.includes('wa.me') || hrefLower.includes('whatsapp') || eventName === 'clique_whatsapp' || clickable.classList.contains('cta-whatsapp')) {
+      channelType = 'WhatsApp';
+      if (!eventName) eventName = 'clique_whatsapp';
+      if (!text) text = 'WhatsApp';
+    } else if (hrefLower.includes('instagram.com') || eventName === 'clique_instagram' || local.includes('instagram')) {
+      channelType = 'Instagram';
+      if (!eventName) eventName = 'clique_instagram';
+      if (!text) text = 'Instagram';
+    } else if (hrefLower.includes('g.page') || hrefLower.includes('share.google') || hrefLower.includes('google.com/maps') || eventName === 'clique_localizacao' || eventName === 'clique_avaliacao' || local.includes('google') || local.includes('maps')) {
+      channelType = 'Google Meu Negócio';
+      if (!eventName) eventName = 'clique_google_negocio';
+      if (!text) text = 'Google Meu Negócio';
+    } else if (hrefLower.includes('agenda.link') || eventName === 'clique_agendamento' || elementId.includes('agendamento')) {
+      channelType = 'Agendamento Online';
+      if (!eventName) eventName = 'clique_agendamento';
+      if (!text) text = 'Agendar Agora';
+    } else if (hrefLower.includes('facebook.com')) {
+      channelType = 'Facebook';
+      if (!eventName) eventName = 'clique_facebook';
+      if (!text) text = 'Facebook';
+    } else if (href.includes('/implante') || href.includes('/preenchimento') || href.includes('/alinhador') || href.includes('/equipe/')) {
+      channelType = 'Navegação Interna';
+      if (!eventName) eventName = 'clique_navegacao';
+    } else if (!eventName) {
+      if (!href || href === '#' || href.startsWith('javascript:')) return;
+      eventName = 'clique_botao';
+    }
+
+    if (!local) {
+      const parentSection = clickable.closest('section') || clickable.closest('header') || clickable.closest('footer');
+      local = parentSection ? (parentSection.id || parentSection.className.split(' ')[0] || 'geral') : 'geral';
+    }
 
     const clickParams = {
       local: local,
       link_text: text,
       link_id: elementId,
       link_url: href,
+      channel_type: channelType
     };
 
     track(eventName, clickParams);
-  });
+  }, true);
 
   // ─────────────────────────────────────────────────────────────
   // 5. TEMPO ATIVO DE PERMANÊNCIA NA PÁGINA (Aba Ativa)

@@ -122,20 +122,50 @@
 
       <div class="kpi-card">
         <div class="kpi-header">
-          <span class="kpi-title">Taxa de Conversão (CTR)</span>
-          <span class="kpi-icon">🎯</span>
-        </div>
-        <div class="kpi-value" id="kpi-ctr">0%</div>
-        <div class="kpi-hint"><span id="kpi-clicks">0</span> cliques gerados</div>
-      </div>
-
-      <div class="kpi-card">
-        <div class="kpi-header">
           <span class="kpi-title">Conclusão de Vídeo</span>
           <span class="kpi-icon">🎬</span>
         </div>
         <div class="kpi-value" id="kpi-video-rate">0%</div>
         <div class="kpi-hint"><span id="kpi-video-completions">0</span> assistiram até o final</div>
+      </div>
+    </section>
+
+    <!-- Grade dos Canais Principais de Conversão -->
+    <section class="channel-kpi-grid">
+      <div class="channel-kpi-card channel-card--whatsapp">
+        <div class="channel-kpi__header">
+          <span class="channel-badge badge-whatsapp">WhatsApp</span>
+          <span class="channel-icon">💬</span>
+        </div>
+        <div class="channel-kpi__val" id="kpi-whatsapp">0</div>
+        <div class="channel-kpi__hint">Cliques para falar no WhatsApp</div>
+      </div>
+
+      <div class="channel-kpi-card channel-card--google">
+        <div class="channel-kpi__header">
+          <span class="channel-badge badge-google">Google Meu Negócio</span>
+          <span class="channel-icon">📍</span>
+        </div>
+        <div class="channel-kpi__val" id="kpi-google">0</div>
+        <div class="channel-kpi__hint">Rotas, Maps e Avaliações</div>
+      </div>
+
+      <div class="channel-kpi-card channel-card--instagram">
+        <div class="channel-kpi__header">
+          <span class="channel-badge badge-instagram">Instagram</span>
+          <span class="channel-icon">📸</span>
+        </div>
+        <div class="channel-kpi__val" id="kpi-instagram">0</div>
+        <div class="channel-kpi__hint">Acessos ao perfil da clínica</div>
+      </div>
+
+      <div class="channel-kpi-card channel-card--agenda">
+        <div class="channel-kpi__header">
+          <span class="channel-badge badge-agenda">Agendamento Online</span>
+          <span class="channel-icon">📅</span>
+        </div>
+        <div class="channel-kpi__val" id="kpi-agendamento">0</div>
+        <div class="channel-kpi__hint">Botão Dourado de Agenda Direta</div>
       </div>
     </section>
 
@@ -170,10 +200,18 @@
     <div class="grid-2col">
       <!-- Ranking de Botões Mais e Menos Clicados -->
       <section class="section-card">
-        <div class="section-header">
+        <div class="section-header" style="flex-wrap: wrap; gap: 0.85rem;">
           <div>
             <h2 class="section-title">Raio-X de Cliques nos Botões</h2>
-            <p class="section-sub">Descubra quais botões mais convertem e quais têm menos cliques</p>
+            <p class="section-sub">Descubra quais botões mais convertem e filtre por canal e data</p>
+          </div>
+          <!-- Filtro por Tipo de Canal do Botão -->
+          <div class="channel-filter-chips" id="channel-filter-chips">
+            <button class="channel-chip active" data-channel="todos">Todos</button>
+            <button class="channel-chip chip-whatsapp" data-channel="WhatsApp">WhatsApp</button>
+            <button class="channel-chip chip-google" data-channel="Google Meu Negócio">Google Negócio</button>
+            <button class="channel-chip chip-instagram" data-channel="Instagram">Instagram</button>
+            <button class="channel-chip chip-agenda" data-channel="Agendamento Online">Agendamento</button>
           </div>
         </div>
         <div class="table-container">
@@ -181,6 +219,7 @@
             <thead>
               <tr>
                 <th>Botão / CTA</th>
+                <th>Canal</th>
                 <th>Página</th>
                 <th>Total Cliques</th>
                 <th>Visitantes Únicos</th>
@@ -188,7 +227,7 @@
               </tr>
             </thead>
             <tbody id="buttons-table-body">
-              <tr><td colspan="5" class="table-empty">Carregando botões...</td></tr>
+              <tr><td colspan="6" class="table-empty">Carregando botões...</td></tr>
             </tbody>
           </table>
         </div>
