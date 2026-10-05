@@ -214,7 +214,8 @@
         loadPages(),
         loadButtons(),
         loadVideos(),
-        loadTimeline()
+        loadTimeline(),
+        loadLocations()
       ]);
     } catch (e) {
       console.error('[Dashboard Load Error]', e);
@@ -444,6 +445,147 @@
       }
     });
   }
+
+  // ─────────────────────────────────────────────────────────────
+  // 9. LOCALIZAÇÃO E CIDADES (EM TEMPO REAL)
+  // ─────────────────────────────────────────────────────────────
+  async function loadLocations() {
+    const tbody = document.getElementById('locations-tbody');
+    if (!tbody) return;
+
+    try {
+      const data = await apiFetch('/api/stats/locations');
+      const list = data.locations || [];
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="table-empty">Coletando acessos e identificando cidades por IP...</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map((loc, idx) => {
+        const visitors = loc.visitors || 0;
+        const waClicks = loc.whatsapp_clicks || 0;
+        const convRate = visitors > 0 ? ((waClicks / visitors) * 100).toFixed(1) : '0.0';
+        return `
+          <tr>
+            <td><strong>#${idx + 1}</strong></td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <span>📍</span>
+                <strong>${escapeHtml(loc.city || 'Desconhecida')}</strong>
+              </div>
+            </td>
+            <td><span class="channel-badge" style="background: rgba(220,195,151,0.15); color: var(--gold-light);">${escapeHtml(loc.region || '—')}</span></td>
+            <td><strong>${visitors}</strong></td>
+            <td>
+              <span class="channel-badge badge-whatsapp" style="font-size: 0.78rem;">
+                ${waClicks} cliques
+              </span>
+            </td>
+            <td><strong style="color: var(--gold-light);">${convRate}%</strong></td>
+          </tr>
+        `;
+      }).join('');
+    } catch (err) {
+      tbody.innerHTML = '<tr><td colspan="6" class="table-empty">Erro ao carregar localizações.</td></tr>';
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 10. NAVEGAÇÃO ENTRE ABAS (DESEMPENHO vs DEMOGRAFIA)
+  // ─────────────────────────────────────────────────────────────
+  const tabBtns = document.querySelectorAll('.dash-tab-btn');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.dataset.tab;
+      tabBtns.forEach(b => b.classList.toggle('active', b === btn));
+      tabPanes.forEach(pane => {
+        if (pane.id === targetId) {
+          pane.style.display = 'flex';
+          pane.classList.add('active');
+        } else {
+          pane.style.display = 'none';
+          pane.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────
+  // 11. CONTROLES DO GOOGLE LOOKER STUDIO EMBED
+  // ─────────────────────────────────────────────────────────────
+  const DEFAULT_LOOKER_URL = 'https://lookerstudio.google.com/embed/reporting/0B5q8XvT_a4RzZVR2blFYWVdOUWM/page/6zXD';
+  const lookerIframe = document.getElementById('looker-iframe');
+  const lookerWrapper = document.getElementById('looker-iframe-container');
+  const btnConfigLooker = document.getElementById('btn-config-looker');
+  const configBox = document.getElementById('looker-config-box');
+  const btnCloseConfig = document.getElementById('btn-close-looker-config');
+  const inputLookerUrl = document.getElementById('looker-url-input');
+  const btnSaveLookerUrl = document.getElementById('btn-save-looker-url');
+  const btnResetLookerUrl = document.getElementById('btn-reset-looker-url');
+  const btnLookerRefresh = document.getElementById('btn-looker-refresh');
+  const btnLookerFullscreen = document.getElementById('btn-looker-fullscreen');
+
+  function initLookerEmbed() {
+    const savedUrl = localStorage.getItem('looker_embed_url') || DEFAULT_LOOKER_URL;
+    if (lookerIframe) lookerIframe.src = savedUrl;
+    if (inputLookerUrl) inputLookerUrl.value = savedUrl;
+  }
+
+  if (btnConfigLooker && configBox) {
+    btnConfigLooker.addEventListener('click', () => {
+      configBox.style.display = configBox.style.display === 'none' ? 'block' : 'none';
+    });
+  }
+
+  if (btnCloseConfig && configBox) {
+    btnCloseConfig.addEventListener('click', () => {
+      configBox.style.display = 'none';
+    });
+  }
+
+  if (btnSaveLookerUrl && inputLookerUrl && lookerIframe) {
+    btnSaveLookerUrl.addEventListener('click', () => {
+      const val = inputLookerUrl.value.trim();
+      if (val) {
+        localStorage.setItem('looker_embed_url', val);
+        lookerIframe.src = val;
+        configBox.style.display = 'none';
+      }
+    });
+  }
+
+  if (btnResetLookerUrl && inputLookerUrl && lookerIframe) {
+    btnResetLookerUrl.addEventListener('click', () => {
+      localStorage.removeItem('looker_embed_url');
+      inputLookerUrl.value = DEFAULT_LOOKER_URL;
+      lookerIframe.src = DEFAULT_LOOKER_URL;
+      configBox.style.display = 'none';
+    });
+  }
+
+  if (btnLookerRefresh && lookerIframe) {
+    btnLookerRefresh.addEventListener('click', () => {
+      const cur = lookerIframe.src;
+      lookerIframe.src = '';
+      setTimeout(() => { lookerIframe.src = cur; }, 100);
+    });
+  }
+
+  if (btnLookerFullscreen && lookerWrapper) {
+    btnLookerFullscreen.addEventListener('click', () => {
+      lookerWrapper.classList.toggle('is-fullscreen');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lookerWrapper.classList.contains('is-fullscreen')) {
+        lookerWrapper.classList.remove('is-fullscreen');
+      }
+    });
+  }
+
+  initLookerEmbed();
 
   // Inicialização
   filterStart.value = filters.startDate;

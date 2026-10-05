@@ -55,10 +55,49 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_events_visitor ON events(visitor_id);
 `);
 
-// Migração segura para adicionar coluna button_type se não existir
+// Migrações seguras para adicionar colunas se não existirem
 try {
   db.exec(`ALTER TABLE events ADD COLUMN button_type TEXT;`);
 } catch (e) {}
+try {
+  db.exec(`ALTER TABLE events ADD COLUMN city TEXT;`);
+} catch (e) {}
+try {
+  db.exec(`ALTER TABLE events ADD COLUMN region TEXT;`);
+} catch (e) {}
+
+// Cache de IP para geolocalização rápida
+const geoCache = new Map();
+
+function getGeoFast(ip) {
+  if (!ip || ip === '127.0.0.1' || ip === '::1' || ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.16.')) {
+    return { city: 'Local / Teste', region: 'Local' };
+  }
+  if (geoCache.has(ip)) {
+    return geoCache.get(ip);
+  }
+  fetchGeoInBackground(ip);
+  return { city: '', region: '' };
+}
+
+async function fetchGeoInBackground(ip) {
+  try {
+    const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,regionName,city`, {
+      signal: AbortSignal.timeout(2000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.status === 'success') {
+        const info = { city: data.city || '', region: data.regionName || data.country || '' };
+        if (geoCache.size > 5000) geoCache.clear();
+        geoCache.set(ip, info);
+        try {
+          db.prepare(`UPDATE events SET city = ?, region = ? WHERE (city IS NULL OR city = '') AND created_date >= date('now', '-1 day')`).run(info.city, info.region);
+        } catch(e) {}
+      }
+    }
+  } catch(e) {}
+}
 
 // Prepara declaração de inserção
 const insertStmt = db.prepare(`
@@ -67,12 +106,14 @@ const insertStmt = db.prepare(`
     target_text, target_id, target_url, target_local, button_type,
     duration_seconds, video_milestone, video_name,
     device, referrer, utm_source, utm_medium, utm_campaign,
+    city, region,
     created_at, created_date
   ) VALUES (
     ?, ?, ?, ?, ?,
     ?, ?, ?, ?, ?,
     ?, ?, ?,
     ?, ?, ?, ?, ?,
+    ?, ?,
     ?, ?
   )
 `);
@@ -139,6 +180,9 @@ app.post('/api/collect', (req, res) => {
     return res.status(400).send('Missing body');
   }
 
+  const clientIp = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+  const geo = getGeoFast(clientIp);
+
   const events = Array.isArray(payload) ? payload : [payload];
   const now = new Date();
   const defaultIso = now.toISOString();
@@ -175,6 +219,8 @@ app.post('/api/collect', (req, res) => {
     const utmSource = (ev.utm_source || '').slice(0, 100);
     const utmMedium = (ev.utm_medium || '').slice(0, 100);
     const utmCampaign = (ev.utm_campaign || '').slice(0, 100);
+    const city = (ev.city || geo.city || '').slice(0, 100);
+    const region = (ev.region || geo.region || '').slice(0, 100);
     const createdAt = ev.created_at || defaultIso;
     const createdDate = createdAt.slice(0, 10) || defaultDate;
 
@@ -184,6 +230,7 @@ app.post('/api/collect', (req, res) => {
         targetText, targetId, targetUrl, targetLocal, buttonType,
         durationSeconds, videoMilestone, videoName,
         device, referrer, utmSource, utmMedium, utmCampaign,
+        city, region,
         createdAt, createdDate
       );
     } catch (err) {
@@ -511,6 +558,37 @@ app.get('/api/stats/timeline', authMiddleware, (req, res) => {
   `);
   const rows = stmt.all(...params);
   res.json(rows);
+});
+
+// ─────────────────────────────────────────────────────────────
+// ENDPOINT 8: LOCALIZAÇÃO E CIDADES (/api/stats/locations)
+// ─────────────────────────────────────────────────────────────
+app.get('/api/stats/locations', authMiddleware, (req, res) => {
+  const { where, params } = buildFilterClause(req);
+  const whereSql = where 
+    ? `${where} AND city IS NOT NULL AND city != ''` 
+    : `WHERE city IS NOT NULL AND city != ''`;
+
+  try {
+    const stmt = db.prepare(`
+      SELECT 
+        city,
+        region,
+        COUNT(DISTINCT visitor_id) as visitors,
+        COUNT(*) as total_events,
+        SUM(CASE WHEN button_type = 'WhatsApp' OR target_url LIKE '%wa.me%' OR target_url LIKE '%whatsapp%' OR event_name = 'clique_whatsapp' THEN 1 ELSE 0 END) as whatsapp_clicks
+      FROM events
+      ${whereSql}
+      GROUP BY city, region
+      ORDER BY visitors DESC
+      LIMIT 25
+    `);
+    const rows = stmt.all(...params);
+    res.json({ locations: rows });
+  } catch (err) {
+    console.error('[Locations Error]', err);
+    res.status(500).json({ error: 'Erro ao consultar cidades' });
+  }
 });
 
 // Servir frontend estático do dashboard
