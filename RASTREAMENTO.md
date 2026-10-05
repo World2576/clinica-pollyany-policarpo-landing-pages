@@ -39,6 +39,7 @@ Todos os eventos abaixo enviam automaticamente os seguintes **parâmetros base**
 
 | Nome do Evento | Disparo | `data-track-local` | Parâmetros Adicionais | Ação nas Plataformas |
 |---|---|---|---|---|
+| `clique_agendamento` | Clique no botão de agendamento online imediato | `arvore_principal`, etc. | `link_text`, `link_url`, `local` | **Meta:** dispara `fbq('track', 'Schedule')` + `trackCustom`<br>**Google Ads:** dispara evento de conversão `conversion` configurado |
 | `clique_whatsapp` | Clique em qualquer botão de WhatsApp | `arvore_principal`, `doutor_[slug]`, `implante_topo`, `implante_final`, etc. | `link_text`, `link_url`, `local` | **Meta:** dispara `fbq('track', 'Contact')` + `trackCustom`<br>**Google Ads:** dispara evento de conversão `conversion` configurado |
 | `clique_localizacao` | Clique no botão "Como chegar" / "Ver rotas" | `arvore`, `implante`, etc. | `link_text`, `link_url`, `local` | `trackCustom` / GA4 event |
 | `clique_doutor` | Clique no card de um doutor na árvore | `dra-pollyany-policarpo`, `dr-naydson-pereira`, etc. | `link_text`, `link_url`, `local` | `trackCustom` / GA4 event |

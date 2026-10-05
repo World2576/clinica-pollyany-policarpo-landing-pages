@@ -186,6 +186,9 @@ const TRACKING_CONFIG = {
         if (eventName === 'clique_whatsapp' || eventName === 'contact') {
           window.fbq('track', 'Contact', enrichedParams);
         }
+        if (eventName === 'clique_agendamento' || eventName === 'schedule') {
+          window.fbq('track', 'Schedule', enrichedParams);
+        }
         window.fbq('trackCustom', eventName, enrichedParams);
       }
     } catch (e) {}
@@ -195,7 +198,7 @@ const TRACKING_CONFIG = {
       if (typeof window.gtag === 'function') {
         window.gtag('event', eventName, enrichedParams);
 
-        if ((eventName === 'clique_whatsapp' || eventName === 'contact') && TRACKING_CONFIG.googleAdsConversao) {
+        if ((eventName === 'clique_whatsapp' || eventName === 'contact' || eventName === 'clique_agendamento' || eventName === 'schedule') && TRACKING_CONFIG.googleAdsConversao) {
           window.gtag('event', 'conversion', {
             send_to: TRACKING_CONFIG.googleAdsConversao,
             ...enrichedParams,

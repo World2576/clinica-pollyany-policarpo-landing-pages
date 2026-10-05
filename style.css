@@ -478,6 +478,113 @@ body::before {
    HIERARQUIA VISUAL DOS BOTÕES
    ============================================================ */
 
+/* ---------- NÍVEL 1: Botão Dourado de Agendamento Imediato (Destaque Máximo Ouro) ---------- */
+.hub-btn--gold {
+  width: 100%;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.95rem 1.35rem;
+  background: linear-gradient(135deg, #F5E5C9 0%, #DCC397 50%, #C39C65 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-md);
+  color: #1A1020 !important;
+  text-decoration: none !important;
+  font-size: 1.02rem;
+  font-weight: 700;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(220, 195, 151, 0.4);
+  animation: goldPulse 3s infinite;
+  transition: all 0.25s var(--ease-out);
+}
+
+.hub-btn--gold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-25deg);
+  animation: goldShimmer 3.8s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.hub-btn--gold:hover {
+  background: linear-gradient(135deg, #FFF0D6 0%, #E7D0AB 50%, #D2A871 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(220, 195, 151, 0.6), 0 0 20px rgba(220, 195, 151, 0.35);
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+.hub-btn--gold:active {
+  transform: scale(0.98);
+}
+
+.hub-btn--gold .hub-btn__icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 16, 32, 0.12);
+  border-radius: var(--radius-sm);
+  color: #1A1020;
+}
+
+.hub-btn--gold .hub-btn__icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.hub-btn--gold .hub-btn__title {
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #1A1020;
+  letter-spacing: -0.01em;
+}
+
+.hub-btn--gold .hub-btn__sub {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(26, 16, 32, 0.82);
+}
+
+.hub-btn--gold .hub-btn__arrow {
+  color: #1A1020;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+}
+
+.hub-btn--gold .hub-btn__arrow svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+@keyframes goldPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 195, 151, 0.5), 0 8px 25px rgba(220, 195, 151, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(220, 195, 151, 0), 0 8px 25px rgba(220, 195, 151, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 195, 151, 0), 0 8px 25px rgba(220, 195, 151, 0.4);
+  }
+}
+
+@keyframes goldShimmer {
+  0% { left: -100%; }
+  30%, 100% { left: 140%; }
+}
+
 /* ---------- NÍVEL 1: WhatsApp Principal (Destaque Máximo) ---------- */
 .hub-btn--level-1 {
   width: 100%;
@@ -1648,7 +1755,7 @@ body::before {
     opacity: 1 !important;
     transform: none !important;
   }
-  .ambient-blob, .particle, .video-ambient-glow, .hub-btn--level-1, .hub-btn--whatsapp-doctor {
+  .ambient-blob, .particle, .video-ambient-glow, .hub-btn--gold, .hub-btn--level-1, .hub-btn--whatsapp-doctor {
     animation: none !important;
   }
   .reviews-marquee-track {
