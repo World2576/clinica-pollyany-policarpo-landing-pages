@@ -142,21 +142,72 @@ const TRACKING_CONFIG = {
   }
 
   // ─────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
   // 2. INICIALIZAÇÃO DE FERRAMENTAS SOB CONSENTIMENTO LGPD
   // ─────────────────────────────────────────────────────────────
   window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function () {
+    window.dataLayer.push(arguments);
+  };
+
+  // Google Consent Mode v2 por padrão
+  const initialConsent = localStorage.getItem(STORAGE_LGPD_KEY);
+  if (initialConsent === 'accepted') {
+    window.gtag('consent', 'default', {
+      'analytics_storage': 'granted',
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted'
+    });
+  } else {
+    window.gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied'
+    });
+  }
 
   function loadExternalTrackingScripts() {
     const consent = localStorage.getItem(STORAGE_LGPD_KEY);
-    if (consent !== 'accepted') {
-      if (TRACKING_CONFIG.debug) {
-        console.log('[Tracking] Scripts de terceiros bloqueados: aguardando consentimento LGPD.');
+    const hasConsent = consent === 'accepted';
+
+    // Carregar Google Tag (gtag) para GA4 e/ou Google Ads
+    const googleId = TRACKING_CONFIG.ga4Id || TRACKING_CONFIG.googleAdsId;
+    if (googleId) {
+      if (hasConsent) {
+        window.gtag('consent', 'update', {
+          'analytics_storage': 'granted',
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted'
+        });
       }
-      return;
+
+      if (!document.getElementById('gtag-script')) {
+        const script = document.createElement('script');
+        script.id = 'gtag-script';
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${googleId}`;
+        document.head.appendChild(script);
+
+        window.gtag('js', new Date());
+
+        if (TRACKING_CONFIG.ga4Id) {
+          window.gtag('config', TRACKING_CONFIG.ga4Id, {
+            send_page_view: true,
+            anonymize_ip: false
+          });
+        }
+        if (TRACKING_CONFIG.googleAdsId) {
+          window.gtag('config', TRACKING_CONFIG.googleAdsId);
+        }
+        if (TRACKING_CONFIG.debug) console.log('[Tracking] Google gtag inicializado:', googleId);
+      }
     }
 
-    // Carregar Meta Pixel
-    if (TRACKING_CONFIG.metaPixelId && !window.fbq) {
+    // Carregar Meta Pixel somente com consentimento aceito
+    if (hasConsent && TRACKING_CONFIG.metaPixelId && !window.fbq) {
       (function (f, b, e, v, n, t, s) {
         if (f.fbq) return;
         n = f.fbq = function () {
@@ -180,29 +231,10 @@ const TRACKING_CONFIG = {
         if (TRACKING_CONFIG.debug) console.log('[Tracking] Meta Pixel inicializado:', TRACKING_CONFIG.metaPixelId);
       } catch (e) {}
     }
-
-    // Carregar Google Tag (gtag) para GA4 e/ou Google Ads
-    const googleId = TRACKING_CONFIG.ga4Id || TRACKING_CONFIG.googleAdsId;
-    if (googleId && typeof window.gtag !== 'function') {
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${googleId}`;
-      document.head.appendChild(script);
-
-      window.gtag = function () {
-        window.dataLayer.push(arguments);
-      };
-      window.gtag('js', new Date());
-
-      if (TRACKING_CONFIG.ga4Id) {
-        window.gtag('config', TRACKING_CONFIG.ga4Id);
-      }
-      if (TRACKING_CONFIG.googleAdsId) {
-        window.gtag('config', TRACKING_CONFIG.googleAdsId);
-      }
-      if (TRACKING_CONFIG.debug) console.log('[Tracking] Google gtag inicializado');
-    }
   }
+
+  // Exporta função para ser chamada pelo banner da LGPD
+  window.initTrackingWithConsent = loadExternalTrackingScripts;
 
   // ─────────────────────────────────────────────────────────────
   // 3. FUNÇÃO CENTRAL DE DISPARO (FAIL-SAFE)
