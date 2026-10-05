@@ -2,3 +2,8 @@
 *IMPLANTE DENTARIO.mp4
 *PREENCHIMENTO LABIAL.mp4
 node_modules/
+analytics/node_modules/
+analytics/data/
+*.db
+*.db-wal
+*.db-shm

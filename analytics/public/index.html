@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultados & Analytics | Clínica Pollyany Policarpo</title>
+  <meta name="description" content="Dashboard executivo de traqueamento e métricas de conversão da Clínica Pollyany Policarpo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Modal de Login -->
+  <div id="login-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-badge">Acesso Restrito</div>
+      <h2 class="modal-title">Painel de Resultados</h2>
+      <p class="modal-sub">Clínica Pollyany Policarpo</p>
+      <form id="login-form" class="modal-form">
+        <div class="input-group">
+          <label for="password-input">Senha de Acesso</label>
+          <input type="password" id="password-input" placeholder="Digite a senha..." required autocomplete="current-password">
+        </div>
+        <div id="login-error" class="login-error" style="display: none;"></div>
+        <button type="submit" id="btn-login" class="btn-primary">
+          <span>Entrar no Painel</span>
+          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard Principal -->
+  <div id="app" class="dashboard-layout" style="display: none;">
+    <!-- Barra Superior -->
+    <header class="top-nav">
+      <div class="brand">
+        <div class="brand-logo">PP</div>
+        <div>
+          <h1 class="brand-title">Clínica Pollyany Policarpo</h1>
+          <span class="brand-tag">Resultados & Métricas em Tempo Real</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <button id="btn-refresh" class="btn-action" title="Atualizar dados">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          <span>Atualizar</span>
+        </button>
+        <button id="btn-logout" class="btn-action btn-logout" title="Sair do painel">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          <span>Sair</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Barra de Filtros de Período e Página -->
+    <section class="filters-bar">
+      <div class="filter-group">
+        <span class="filter-label">Período:</span>
+        <div class="quick-dates">
+          <button class="date-chip active" data-period="today">Hoje</button>
+          <button class="date-chip" data-period="yesterday">Ontem</button>
+          <button class="date-chip" data-period="7d">Últimos 7 dias</button>
+          <button class="date-chip" data-period="30d">Últimos 30 dias</button>
+          <button class="date-chip" data-period="month">Mês Atual</button>
+        </div>
+      </div>
+
+      <div class="filter-group filter-custom">
+        <label for="filter-start" class="filter-label">De:</label>
+        <input type="date" id="filter-start" class="date-input">
+        <label for="filter-end" class="filter-label">Até:</label>
+        <input type="date" id="filter-end" class="date-input">
+        <button id="btn-apply-dates" class="btn-sm">Filtrar</button>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Página:</span>
+        <select id="filter-page" class="select-input">
+          <option value="todas">Todas as Páginas</option>
+          <option value="principal">Página Principal (Árvore)</option>
+          <option value="implante">Implantes Dentários</option>
+          <option value="preenchimento">Preenchimento Labial</option>
+          <option value="alinhador">Alinhadores Invisíveis</option>
+          <option value="equipe">Perfis dos Doutores</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Grade de Métricas Principais (KPIs) -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Visitantes Únicos</span>
+          <span class="kpi-icon">👥</span>
+        </div>
+        <div class="kpi-value" id="kpi-visitors">0</div>
+        <div class="kpi-hint">Pessoas distintas que navegaram</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Visualizações de Páginas</span>
+          <span class="kpi-icon">👁️</span>
+        </div>
+        <div class="kpi-value" id="kpi-views">0</div>
+        <div class="kpi-hint">Total de acessos registrados</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Tempo Médio na Página</span>
+          <span class="kpi-icon">⏱️</span>
+        </div>
+        <div class="kpi-value" id="kpi-time">0s</div>
+        <div class="kpi-hint">Tempo ativo em aba aberta</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Taxa de Conversão (CTR)</span>
+          <span class="kpi-icon">🎯</span>
+        </div>
+        <div class="kpi-value" id="kpi-ctr">0%</div>
+        <div class="kpi-hint"><span id="kpi-clicks">0</span> cliques gerados</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Conclusão de Vídeo</span>
+          <span class="kpi-icon">🎬</span>
+        </div>
+        <div class="kpi-value" id="kpi-video-rate">0%</div>
+        <div class="kpi-hint"><span id="kpi-video-completions">0</span> assistiram até o final</div>
+      </div>
+    </section>
+
+    <!-- Seção de Comparativo por Página -->
+    <section class="section-card">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Desempenho por Página</h2>
+          <p class="section-sub">Comparativo de tráfego, tempo de permanência e taxa de cliques</p>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table" id="pages-table">
+          <thead>
+            <tr>
+              <th>Página</th>
+              <th>Visitantes</th>
+              <th>Visualizações</th>
+              <th>Tempo Médio</th>
+              <th>Cliques em Botões</th>
+              <th>Taxa de Conversão</th>
+            </tr>
+          </thead>
+          <tbody id="pages-table-body">
+            <tr><td colspan="6" class="table-empty">Carregando dados...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Grade: Ranking de Botões & Análise de Vídeo -->
+    <div class="grid-2col">
+      <!-- Ranking de Botões Mais e Menos Clicados -->
+      <section class="section-card">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Raio-X de Cliques nos Botões</h2>
+            <p class="section-sub">Descubra quais botões mais convertem e quais têm menos cliques</p>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="buttons-table">
+            <thead>
+              <tr>
+                <th>Botão / CTA</th>
+                <th>Página</th>
+                <th>Total Cliques</th>
+                <th>Visitantes Únicos</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="buttons-table-body">
+              <tr><td colspan="5" class="table-empty">Carregando botões...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Análise de Vídeos & Funil de Retenção -->
+      <section class="section-card">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Retenção de Vídeo & Funil</h2>
+            <p class="section-sub">Até onde os visitantes assistiram e quantos clicaram após o vídeo</p>
+          </div>
+        </div>
+
+        <div class="video-stats-box">
+          <div class="stat-mini">
+            <span class="stat-mini__label">Plays Iniciados</span>
+            <span class="stat-mini__val" id="video-plays-val">0</span>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-mini__label">Tempo Médio Assistido</span>
+            <span class="stat-mini__val" id="video-duration-val">0s</span>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-mini__label">Assistiram até o Final</span>
+            <span class="stat-mini__val" id="video-full-val">0</span>
+          </div>
+        </div>
+
+        <!-- Barras do Funil de Retenção -->
+        <div class="funnel-container">
+          <div class="funnel-step">
+            <div class="funnel-step__info">
+              <span>Início do Vídeo (Play)</span>
+              <span id="funnel-play-pct">100%</span>
+            </div>
+            <div class="funnel-bar"><div id="bar-play" class="funnel-fill" style="width: 100%;"></div></div>
+          </div>
+
+          <div class="funnel-step">
+            <div class="funnel-step__info">
+              <span>Assistiram 25%</span>
+              <span id="funnel-25-pct">0%</span>
+            </div>
+            <div class="funnel-bar"><div id="bar-25" class="funnel-fill" style="width: 0%;"></div></div>
+          </div>
+
+          <div class="funnel-step">
+            <div class="funnel-step__info">
+              <span>Assistiram 50%</span>
+              <span id="funnel-50-pct">0%</span>
+            </div>
+            <div class="funnel-bar"><div id="bar-50" class="funnel-fill" style="width: 0%;"></div></div>
+          </div>
+
+          <div class="funnel-step">
+            <div class="funnel-step__info">
+              <span>Assistiram 75%</span>
+              <span id="funnel-75-pct">0%</span>
+            </div>
+            <div class="funnel-bar"><div id="bar-75" class="funnel-fill" style="width: 0%;"></div></div>
+          </div>
+
+          <div class="funnel-step">
+            <div class="funnel-step__info">
+              <span class="highlight-gold">Concluíram 100% (Até o final)</span>
+              <span id="funnel-100-pct" class="highlight-gold">0%</span>
+            </div>
+            <div class="funnel-bar"><div id="bar-100" class="funnel-fill gold-fill" style="width: 0%;"></div></div>
+          </div>
+        </div>
+
+        <!-- Cruzamento de Conversão pós Vídeo -->
+        <div class="cross-conversion-card">
+          <div class="cross-title">🎯 Impacto do Vídeo nos Agendamentos:</div>
+          <div class="cross-grid">
+            <div class="cross-item">
+              <div class="cross-item__rate" id="cross-completed-rate">0%</div>
+              <div class="cross-item__desc">dos que <strong>assistiram 100%</strong> clicaram no botão de agendamento</div>
+            </div>
+            <div class="cross-item">
+              <div class="cross-item__rate muted" id="cross-dropped-rate">0%</div>
+              <div class="cross-item__desc">dos que <strong>abandonaram o vídeo</strong> clicaram no botão</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Linha do Tempo e Gráfico de Tendência -->
+    <section class="section-card">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Evolução no Período Selecionado</h2>
+          <p class="section-sub">Acompanhe visitantes e cliques dia a dia</p>
+        </div>
+      </div>
+      <div class="chart-container" style="position: relative; height: 320px; width: 100%;">
+        <canvas id="timelineChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+      <p>Clínica Pollyany Policarpo &copy; 2026 — Sistema Proprietário de Inteligência & Rastreamento</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

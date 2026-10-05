@@ -11,11 +11,60 @@ const TRACKING_CONFIG = {
   googleAdsId: '',                 // ainda não criado
   googleAdsConversao: '',          // ainda não criado
   ga4Id: 'G-NC7HS7SFY2',
+  customApiUrl: 'https://resultados.pollyanypolicarpo.com.br/api/collect',
   debug: false,
 };
 
 (function () {
   'use strict';
+
+  // ─────────────────────────────────────────────────────────────
+  // 0. IDENTIFICAÇÃO DE VISITANTE, SESSÃO E DISPOSITIVO
+  // ─────────────────────────────────────────────────────────────
+  function getOrCreateId(key, prefix) {
+    try {
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = prefix + '_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+        localStorage.setItem(key, id);
+      }
+      return id;
+    } catch (e) {
+      return prefix + '_' + Math.random().toString(36).substring(2, 9);
+    }
+  }
+
+  function getOrCreateSessionId() {
+    try {
+      let id = sessionStorage.getItem('pp_session_id');
+      if (!id) {
+        id = 's_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+        sessionStorage.setItem('pp_session_id', id);
+      }
+      return id;
+    } catch (e) {
+      return 's_' + Math.random().toString(36).substring(2, 9);
+    }
+  }
+
+  const visitorId = getOrCreateId('pp_visitor_id', 'v');
+  const sessionId = getOrCreateSessionId();
+
+  function getDeviceType() {
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return 'tablet';
+    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated/i.test(ua)) return 'mobile';
+    return 'desktop';
+  }
+
+  function getPageCategory() {
+    const path = window.location.pathname.toLowerCase();
+    if (path.includes('/implante')) return 'implante';
+    if (path.includes('/preenchimento-labial') || path.includes('/preenchimento')) return 'preenchimento';
+    if (path.includes('/alinhador')) return 'alinhador';
+    if (path.includes('/equipe/')) return 'equipe';
+    return 'principal';
+  }
 
   // ─────────────────────────────────────────────────────────────
   // 1. CAPTURA E PERSISTÊNCIA DE UTMs
@@ -206,11 +255,65 @@ const TRACKING_CONFIG = {
         }
       }
     } catch (e) {}
+
+    // 4. API Própria de Analytics (resultados.pollyanypolicarpo.com.br)
+    try {
+      dispatchToCustomAnalytics(eventName, enrichedParams);
+    } catch (e) {}
+  }
+
+  function dispatchToCustomAnalytics(eventName, params = {}) {
+    if (!TRACKING_CONFIG.customApiUrl) return;
+
+    const payload = {
+      visitor_id: visitorId,
+      session_id: sessionId,
+      event_name: eventName,
+      page_path: window.location.pathname,
+      page_category: getPageCategory(),
+      target_text: params.link_text || params.video || '',
+      target_id: params.link_id || '',
+      target_url: params.link_url || '',
+      target_local: params.local || '',
+      duration_seconds: params.segundos || params.segundos_ativos || params.tempo_decorrido || params.duracao || 0,
+      video_milestone: params.progresso ? parseInt(params.progresso, 10) : (eventName === 'video_completo' ? 100 : 0),
+      video_name: params.video || '',
+      device: getDeviceType(),
+      referrer: document.referrer || '',
+      utm_source: currentUtms.utm_source || '',
+      utm_medium: currentUtms.utm_medium || '',
+      utm_campaign: currentUtms.utm_campaign || '',
+      created_at: new Date().toISOString()
+    };
+
+    const jsonStr = JSON.stringify(payload);
+
+    if (navigator.sendBeacon) {
+      try {
+        const blob = new Blob([jsonStr], { type: 'text/plain;charset=UTF-8' });
+        navigator.sendBeacon(TRACKING_CONFIG.customApiUrl, blob);
+        return;
+      } catch (e) {}
+    }
+
+    try {
+      fetch(TRACKING_CONFIG.customApiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: jsonStr,
+        keepalive: true
+      }).catch(() => {});
+    } catch (e) {}
   }
 
   // Exportar globalmente
   window.track = track;
   window.initTrackingWithConsent = loadExternalTrackingScripts;
+
+  // Disparo automático do page_view na abertura da página
+  try {
+    track('page_view', { page_category: getPageCategory() });
+  } catch (e) {}
 
   // ─────────────────────────────────────────────────────────────
   // 4. DELEGAÇÃO DE EVENTOS DE CLIQUE (data-track)
@@ -223,10 +326,12 @@ const TRACKING_CONFIG = {
     const local = targetElement.getAttribute('data-track-local') || 'geral';
     const text = (targetElement.innerText || targetElement.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80);
     const href = targetElement.getAttribute('href') || '';
+    const elementId = targetElement.id || '';
 
     const clickParams = {
       local: local,
       link_text: text,
+      link_id: elementId,
       link_url: href,
     };
 
